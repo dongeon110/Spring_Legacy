@@ -1,10 +1,11 @@
-package com.dongeon.controller;
+package com.dongeon.studyspring.dongeon.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class TestController {
+
     @RequestMapping("/")
     public String test() {
         return "index";
