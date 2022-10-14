@@ -13,6 +13,7 @@ import org.dongeon.domain.SampleDTOList;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,7 +129,18 @@ public class SampleController {
 
     @GetMapping("/exUpload")
     public void exUpload() {
-        log.info("/exUpload...............")
+        log.info("/exUpload...............");
     }
+
+    @PostMapping("/exUploadPost")
+    public void exUploadPost(ArrayList<MultipartFile> files) {
+        files.forEach(file -> {
+            log.info("------------------------");
+            log.info("name:" + file.getOriginalFilename());
+            log.info("size:" + file.getSize());
+        });
+    }
+
+    
 }
 

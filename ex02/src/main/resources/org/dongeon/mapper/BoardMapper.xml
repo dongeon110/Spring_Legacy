@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dongeon.mapper.BoardMapper">
+
+	<select id="getList" resultType="org.dongeon.domain.BoardVO">
+	<![CDATA[
+	SELECT * FROM tbl_board WHERE bno > 0
+	]]>
+	</select>
+
+	<insert id="insert">
+	INSERT INTO tbl_board (title, bcontent, writer)
+	values (#{title}, #{bcontent}, #{writer})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="long">
+		SELECT NEXTVAL('tbl_board_bno_seq')
+		</selectKey>
+	INSERT INTO tbl_board (bno, title, bcontent, writer)
+	VALUES (#{bno}, #{title}, #{bcontent}, #{writer})
+	</insert>
+	
+	<select id="read" resultType="org.dongeon.domain.BoardVO">
+	SELECT * FROM tbl_board WHERE bno = #{bno}
+	</select>
+</mapper>

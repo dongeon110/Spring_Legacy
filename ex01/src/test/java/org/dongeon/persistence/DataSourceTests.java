@@ -6,7 +6,6 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
