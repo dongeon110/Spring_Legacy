@@ -27,4 +27,16 @@
 	<select id="read" resultType="org.dongeon.domain.BoardVO">
 	SELECT * FROM tbl_board WHERE bno = #{bno}
 	</select>
+
+	<delete id="delete" >
+		DELETE FROM tbl_board WHERE bno = #{bno}
+	</delete>
+
+	<update id="update" >
+		UPDATE tbl_board SET title = #{title},
+		                     bcontent = #{bcontent},
+		                     writer = #{writer},
+		                     updateDate = NOW()
+		WHERE bno = #{bno}
+	</update>
 </mapper>

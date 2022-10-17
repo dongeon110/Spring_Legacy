@@ -27,4 +27,6 @@
 	</bean>
 	
 	<mybatis-spring:scan base-package="org.dongeon.mapper" />
+
+	<context:component-scan base-package="org.dongeon.service"></context:component-scan>
 </beans>
