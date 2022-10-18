@@ -10,6 +10,43 @@
 	]]>
 	</select>
 
+
+	<!-- BoardMapper.xml의 목록과 데이터 개수 처리 -->
+	<!-- sql로 선언하면 재사용 할 수 있음 -->
+	<sql id="criteria">
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							bcontent like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+
+	<select id="getListWithPaging" resultType="org.dongeon.domain.BoardVO">
+	<![CDATA[
+	SELECT bno, title, bcontent, writer, regdate, updatedate
+	FROM (
+			 SELECT (ROW_NUMBER() OVER()) AS rn, bno, title, bcontent, writer, regdate, updatedate
+			 FROM tbl_board
+	]]>
+	<include refid="criteria"></include>
+	<![CDATA[
+		 ) AS aa WHERE rn > (#{pageNum}-1)*#{amount} and rn <= #{pageNum}*#{amount}
+	]]>
+	</select>
+
 	<insert id="insert">
 	INSERT INTO tbl_board (title, bcontent, writer)
 	values (#{title}, #{bcontent}, #{writer})
@@ -39,4 +76,10 @@
 		                     updateDate = NOW()
 		WHERE bno = #{bno}
 	</update>
+
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM tbl_board
+	<include refid="criteria"></include>
+	</select>
+
 </mapper>

@@ -3,6 +3,7 @@ package org.dongeon.service;
 import java.util.List;
 
 import org.dongeon.domain.BoardVO;
+import org.dongeon.domain.Criteria;
 
 public interface BoardService {
 
@@ -14,5 +15,9 @@ public interface BoardService {
 
     public boolean remove(long bno);
 
-    public List<BoardVO> getList();
+//    public List<BoardVO> getList();
+
+    public List<BoardVO> getList(Criteria cri);
+
+    public int getTotal(Criteria cri);
 }

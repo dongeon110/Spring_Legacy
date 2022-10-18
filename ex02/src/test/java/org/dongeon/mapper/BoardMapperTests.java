@@ -1,6 +1,7 @@
 package org.dongeon.mapper;
 
 import org.dongeon.domain.BoardVO;
+import org.dongeon.domain.Criteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -72,5 +75,27 @@ public class BoardMapperTests {
 
 		int count = mapper.update(board);
 		log.info("UPDATE COUNT: " + count);
+	}
+
+	@Test
+	public void testPaging() {
+		Criteria cri = new Criteria();
+		// 10개씩 3페이지
+		cri.setPageNum(3);
+		cri.setAmount(10);
+
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+
+		list.forEach(board -> log.info(board));
+	}
+
+	@Test
+	public void testSearch() {
+		Criteria cri = new Criteria();
+		cri.setKeyword("새로");
+		cri.setType("T");
+
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		list.forEach(board -> log.info(board));
 	}
 }
