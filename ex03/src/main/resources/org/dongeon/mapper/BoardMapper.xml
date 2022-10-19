@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dongeon.mapper.BoardMapper">
+
+	<select id="getList" resultType="org.dongeon.domain.BoardVO">
+	<![CDATA[
+	SELECT * FROM tbl_board WHERE bno > 0
+	]]>
+	</select>
+
+
+	<!-- BoardMapper.xml의 목록과 데이터 개수 처리 -->
+	<!-- sql로 선언하면 재사용 할 수 있음 -->
+	<sql id="criteria">
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							bcontent like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+
+	<select id="getListWithPaging" resultType="org.dongeon.domain.BoardVO">
+	<![CDATA[
+	SELECT bno, title, bcontent, writer, regdate, updatedate
+	FROM (
+			 SELECT (ROW_NUMBER() OVER()) AS rn, bno, title, bcontent, writer, regdate, updatedate
+			 FROM tbl_board
+	]]>
+	<include refid="criteria"></include>
+	<![CDATA[
+		 	ORDER BY bno DESC
+			 ) AS aa WHERE rn > (#{pageNum}-1)*#{amount} and rn <= #{pageNum}*#{amount}
+	]]>
+	</select>
+
+	<insert id="insert">
+	INSERT INTO tbl_board (title, bcontent, writer)
+	values (#{title}, #{bcontent}, #{writer})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="long">
+		SELECT NEXTVAL('tbl_board_bno_seq')
+		</selectKey>
+	INSERT INTO tbl_board (bno, title, bcontent, writer)
+	VALUES (#{bno}, #{title}, #{bcontent}, #{writer})
+	</insert>
+	
+	<select id="read" resultType="org.dongeon.domain.BoardVO">
+	SELECT * FROM tbl_board WHERE bno = #{bno}
+	</select>
+
+	<delete id="delete" >
+		DELETE FROM tbl_board WHERE bno = #{bno}
+	</delete>
+
+	<update id="update" >
+		UPDATE tbl_board SET title = #{title},
+		                     bcontent = #{bcontent},
+		                     writer = #{writer},
+		                     updateDate = NOW()
+		WHERE bno = #{bno}
+	</update>
+
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM tbl_board
+	<include refid="criteria"></include>
+	</select>
+
+</mapper>
