@@ -20,8 +20,6 @@
       <!-- /.panel-heading -->
       <div class="panel-body">
 
-        <div class="panel-heading">Board Read Page</div>
-        <!-- /.panel-heading -->
         <div class="panel-body">
           <div class="form-group">
             <label>Bno</label> <input class="form-control" name="bno"
@@ -72,19 +70,260 @@
   <!-- end panel -->
 </div>
 <!-- /.row -->
+
+<div class='row'>
+
+    <div class="col-lg-12">
+
+        <!-- /.panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-comments fa-fw"></i> Reply
+                <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+            </div>
+
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+
+                <ul class="chat">
+                    <!-- start reply -->
+                    <li class="left clearfix" data-rno="12">
+                        <div>
+                            <div class="header">
+                                <strong class="primary-font">user00</strong>
+                                <small class="pull-right text-muted">2022-10-10 10:10</small>
+                            </div>
+                            <p>Good job!</p>
+                        </div>
+                    </li>
+                    <!-- end reply -->
+                </ul>
+                <!-- ./end ul -->
+            </div>
+            <!-- /.panel .chat-panel -->
+            <div class="panel-footer"></div>
+        </div>
+    </div>
+<!-- ./end row -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Reply</label>
+                    <input class="form-control" name="reply" value="New Reply!!!">
+                </div>
+
+                <div class="form-group">
+                    <label>Replyer</label>
+                    <input class="form-control" name="replyer" value="replyer">
+                </div>
+
+                <div class="form-group">
+                    <label>Reply Date</label>
+                    <input class="form-control" name="replyDate" value="2022-10-01 12:34">
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="modalModBtn" type="button" class="btn btn-warning">Modify</button>
+                <button id="modalRemoveBtn" type="button" class="btn btn-danger">Remove</button>
+                <button id="modalRegisterBtn" type="button" class="btn btn-primary">Register</button>
+                <button id="modalCloseBtn" type="button" class="btn btn-default">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <%@include file="../includes/footer.jsp" %>
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    var operForm = $("#operForm");
-    $("button[data-oper='modify']").on("click", function(e) {
-      operForm.attr("action", "modify").submit();
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script>
+
+    $(document).ready(function() {
+        var bnoValue = '<c:out value="${board.bno}"/>';
+        var replyUL = $(".chat");
+
+        showList(1);
+
+        function showList(page) {
+            console.log("show list " + page);
+
+            replyService.getList({bno:bnoValue, page: page || 1}, function(list) {
+                // console.log("replyCnt: " + replyCnt);
+                // console.log("list: " + list);
+                // console.log(list);
+
+                // if(page == -1) {
+                //     pageNum = Math.ceil(replyCnt/10.0);
+                //     showList(pageNum);
+                //     return;
+                // }
+
+                var str="";
+
+                if(list == null || list.length == 0) {
+                    replyUL.html("");
+
+                    return;
+                }
+
+                for (var i=0, len=list.length || 0; i<len; i++) {
+                    str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
+                    str +="  <div><div class='header'><strong class='primary-font'>["
+                        +list[i].rno+"] "+list[i].replyer+"</strong>";
+                    str +="    <small class='pull-right text-muted'>"
+                        +replyService.displayTime(list[i].replyDate)+"</small></div>";
+                    str +="    <p>"+list[i].reply+"</p></div></li>";
+                }
+                replyUL.html(str);
+            }); // end function
+        } // end showList
+
+        var modal = $(".modal");
+        var modalInputReply = modal.find("input[name='reply']");
+        var modalInputReplyer = modal.find("input[name='replyer']");
+        var modalInputReplyDate = modal.find("input[name='replyDate']");
+
+        var modalModBtn = $("#modalModBtn");
+        var modalRemoveBtn = $("#modalRemoveBtn");
+        var modalRegisterBtn = $("#modalRegisterBtn");
+
+        $("#modalCloseBtn").on("click", function(e) {
+
+            modal.modal("hide");
+        });
+
+        $("#addReplyBtn").on("click", function(e){
+
+            modal.find("input").val("");
+            modalInputReplyDate.closest("div").hide();
+            modal.find("button[id != 'modalCloseBtn']").hide();
+
+            modalRegisterBtn.show();
+
+            $(".modal").modal("show");
+        });
+
+        modalRegisterBtn.on("click", function(e) {
+            var reply = {
+                reply: modalInputReply.val(),
+                replyer: modalInputReplyer.val(),
+                bno: bnoValue
+            };
+
+            replyService.add(reply, function(result) {
+                alert(result);
+
+                modal.find("input").val("");
+                modal.modal("hide");
+
+                showList(1);
+            });
+        });
+
+
+        $(".chat").on("click", "li", function(e) {
+
+            var rno = $(this).data("rno");
+
+            replyService.get(rno, function(reply) {
+                modalInputReply.val(reply.reply);
+                modalInputReplyer.val(reply.replyer);
+                modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly", "readonly");
+                modal.data("rno", reply.rno);
+
+                modal.find("button[id != 'modalCloseBtn']").hide();
+                modalModBtn.show();
+                modalRemoveBtn.show();
+
+                $(".modal").modal("show");
+
+            });
+        });
+
+
     });
 
-    $("button[data-oper='list']").on("click", function(e) {
-      operForm.find("#bno").remove();
-      operForm.attr("action", "list")
-      operForm.submit();
-    });
+</script>
+
+
+
+
+<script>
+  console.log("============");
+  console.log("JS TEST");
+
+  var bnoValue = '<c:out value="${board.bno}"/>';
+
+  replyService.getList({bno:bnoValue, page:1}, function(list) {
+      for(var i = 0, len = list.length||0; i < len; i++ ){
+          console.log(list[i]);
+      }
   });
+
+  // // for replyService add test
+  // replyService.add(
+  //     {reply:"JS Test", replyer:"tester", bno:bnoValue}
+  //     ,
+  //     function(result) {
+  //         alert("RESULT: " + result);
+  //     }
+  // );
+
+  // // 삭제 테스트 (8번 댓글 테스트)
+  // replyService.remove(8, function(count) {
+  //     console.log(count);
+  //
+  //     if (count === "success") {
+  //         alert("REMOVED");
+  //     }
+  // }, function(err) {
+  //     alert("ERROR....");
+  // })
+
+  // // 수정 테스트 (14번 댓글 테스트)
+  // replyService.update({
+  //     rno : 14,
+  //     bno : bnoValue,
+  //     reply : "Modified Reply...."
+  // }, function(result) {
+  //     alert("수정 완료....");
+  // });
+
+  replyService.get(10, function(data){
+      console.log(data);
+  });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var operForm = $("#operForm");
+        $("button[data-oper='modify']").on("click", function(e) {
+            operForm.attr("action", "/board/modify").submit();
+        });
+
+        $("button[data-oper='list']").on("click", function(e) {
+            operForm.find("#bno").remove();
+            operForm.attr("action", "/board/list")
+            operForm.submit();
+        });
+
+        console.log(replyService);
+    });
 </script>
