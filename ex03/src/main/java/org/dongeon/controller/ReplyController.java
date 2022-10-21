@@ -3,6 +3,7 @@ package org.dongeon.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.dongeon.domain.Criteria;
+import org.dongeon.domain.ReplyPageDTO;
 import org.dongeon.domain.ReplyVO;
 import org.dongeon.service.ReplyService;
 import org.springframework.http.HttpStatus;
@@ -38,14 +39,15 @@ public class ReplyController {
         produces = {
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_JSON_UTF8_VALUE })
-    public ResponseEntity<List<ReplyVO>> getList(
+    public ResponseEntity<ReplyPageDTO> getList(
             @PathVariable("page") int page,
             @PathVariable("bno") Long bno) {
-        log.info("getList................");
-        Criteria cri = new Criteria(page, 10);
-        log.info(cri);
 
-        return new ResponseEntity<>(service.getList(cri, bno), HttpStatus.OK);
+        Criteria cri = new Criteria(page, 10);
+        log.info("get Reply List bno: " + bno);
+        log.info("cri: "+cri);
+
+        return new ResponseEntity<>(service.getListPage(cri, bno), HttpStatus.OK);
     }
 
     @GetMapping(value= "/{rno}",

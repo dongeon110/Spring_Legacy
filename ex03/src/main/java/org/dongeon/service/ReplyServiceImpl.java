@@ -3,6 +3,7 @@ package org.dongeon.service;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.dongeon.domain.Criteria;
+import org.dongeon.domain.ReplyPageDTO;
 import org.dongeon.domain.ReplyVO;
 import org.dongeon.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,12 @@ public class ReplyServiceImpl implements ReplyService {
         log.info("get Reply List of a Board " + bno);
 
         return mapper.getListWithPaging(cri, bno);
+    }
+
+    @Override
+    public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+        return new ReplyPageDTO(
+                mapper.getCountByBno(bno),
+                mapper.getListWithPaging(cri, bno));
     }
 }
