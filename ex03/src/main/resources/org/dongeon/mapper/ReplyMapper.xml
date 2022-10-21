@@ -22,10 +22,20 @@
     </update>
 
     <select id="getListWithPaging" resultType="org.dongeon.domain.ReplyVO">
-        SELECT rno, bno, reply, replyer, replyDate, updatedate
+    <![CDATA[
+    SELECT rno, bno, reply, replyer, replyDate, updatedate
+    FROM (
+        SELECT (ROW_NUMBER() OVER()) AS rn, rno, bno, reply, replyer, replyDate, updatedate
         FROM tbl_reply
         WHERE bno = #{bno}
         ORDER BY rno ASC
+         ) AS aa
+    WHERE rn > (#{cri.pageNum}-1)*#{cri.amount}
+      AND rn <= #{cri.pageNum}*#{cri.amount}
+    ]]>
     </select>
 
+    <select id="getCountByBno" resultType="int">
+        SELECT COUNT(*) FROM tbl_reply WHERE bno = #{bno}
+    </select>
 </mapper>

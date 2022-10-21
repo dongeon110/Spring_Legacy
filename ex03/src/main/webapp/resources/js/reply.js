@@ -27,12 +27,12 @@ var replyService = (function(){ // ( )안에서 선언된 함수 = 즉시 실행
         function getList(param, callback, error) {
 
                 var bno = param.bno;
-                var page = param.page || 1;
+                var page = param.page || 1; // param.page가 없으면 1을 반환 있으면 param.page반환
 
                 $.getJSON("/replies/pages/" + bno + "/" + page + ".json",
                     function(data) {
                         if (callback) {
-                                callback(data);
+                                callback(data.replyCnt, data.list);
                         }
                     }).fail(function(xhr, status, err) {
                         if(error) {
