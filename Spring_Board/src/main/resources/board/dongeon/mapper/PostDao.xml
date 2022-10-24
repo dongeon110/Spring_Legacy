@@ -32,9 +32,6 @@
                     <when test="type == 'P'.toString()">
                         postername LIKE '%'||#{keyword}||'%'
                     </when>
-                    <otherwise>
-                        psubject LIKE '%'||#{keyword}||'%'
-                    </otherwise>
                 </choose>
             </foreach>
         </trim>
@@ -44,18 +41,24 @@
     <select id="selectList" resultMap="postVOResultMap">
         SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
         FROM (
-                 SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
+                 SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
                  FROM BOARD ORDER BY REPOST DESC, PNO DESC) AS ROWBOARD
     </select>
 
 
     <select id="searchList" parameterType="map" resultMap="postVOResultMap">
-        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
-        FROM (
-        SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
-        FROM BOARD
-        <include refid="searchinfo"></include>
-        ORDER BY REPOST DESC, PNO DESC) AS ROWBOARD
+        SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER FROM
+            (SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
+            FROM
+                (   SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, REPOST, PVIEWS, BYUSER
+                    FROM BOARD
+            <include refid="searchinfo"></include>
+                    ORDER BY REPOST DESC, PNO DESC) AS ROWBOARD
+            ) AS ORDERBOARD
+            <![CDATA[
+                    WHERE ROWNUM > (#{pageNum}-1)*#{amount} AND ROWNUM <= #{pageNum}*#{amount}
+            ]]>
+
     </select>
 
     <insert id="insert" parameterType="postVO">
