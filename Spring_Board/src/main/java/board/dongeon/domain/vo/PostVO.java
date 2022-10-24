@@ -1,5 +1,6 @@
 package board.dongeon.domain.vo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.Data;

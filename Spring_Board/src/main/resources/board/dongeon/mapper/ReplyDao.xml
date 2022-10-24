@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board.dongeon.mapper.ReplyDao">
+
+    <insert id="insert">
+        INSERT INTO reply (pno, reply, replyer)
+        VALUES (#{pno}, #{reply}, #{replyer})
+    </insert>
+
+    <select id="read" resultType="board.dongeon.domain.vo.ReplyVO">
+        SELECT * FROM reply WHERE rno = #{rno}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM reply WHERE rno = #{rno}
+    </delete>
+
+    <update id="update">
+        UPDATE reply SET reply=#{reply}, updatedate=NOW() WHERE rno=#{rno}
+    </update>
+
+    <select id="getListWithPaging" resultType="board.dongeon.domain.vo.ReplyVO">
+    <![CDATA[
+        SELECT rno, pno, reply, replyer, replyDate, updatedate
+        FROM (
+                 SELECT (ROW_NUMBER() OVER()) AS rn, rno, pno, reply, replyer, replyDate, updatedate
+                 FROM reply
+                 WHERE pno = #{pno}
+                 ORDER BY rno ASC
+             ) AS aa
+        WHERE rn > (#{searchInfo.pageNum}-1)*#{searchInfo.amount}
+          AND rn <= #{searchInfo.pageNum}*#{searchInfo.amount}
+        ]]>
+    </select>
+
+    <select id="getCountByPno" resultType="int">
+        SELECT COUNT(*) FROM reply WHERE pno = #{pno}
+    </select>
+</mapper>
