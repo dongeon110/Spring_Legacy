@@ -15,13 +15,13 @@
 		
 		<form action='update.do' method='post'>
 			<input type='hidden' name='no' value='${no}'><br>
-			<input type='hidden' name='userNo' value='${user.userNo}'><br>
-			ID: <input type='text' name='userID' value='${user.userID}'><br>
-			이름: <input type='text' name='userName' value='${user.userName}'><br>
+			<input type='hidden' name='userNo' value='${userVO.userNo}'><br>
+			ID: <input type='text' name='userID' value='${userVO.userID}'><br>
+			이름: <input type='text' name='userName' value='${userVO.userName}'><br>
 			암호: <input type='password' name='userPassword'><br>
 			권한: <select id="grade" name='grade'>
-				<option value="1" ${user.grade == 1? "selected" : ""}>관리자</option>
-				<option value="2" ${user.grade == 2? "selected" : ""}>일반</option>
+				<option value="1" ${userVO.grade == 1? "selected" : ""}>관리자</option>
+				<option value="2" ${userVO.grade == 2? "selected" : ""}>일반</option>
 			</select>
 			<input type='submit' value='수정'>
 			<input type='reset' value='취소'>

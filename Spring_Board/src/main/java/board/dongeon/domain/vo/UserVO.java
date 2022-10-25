@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class User {
+public class UserVO {
 
     private int userNo;
     private String userID;

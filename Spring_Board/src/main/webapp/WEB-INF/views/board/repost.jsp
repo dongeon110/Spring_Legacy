@@ -33,7 +33,7 @@
 				</c:if>
 				<c:if test="${!empty sessionScope.loginUser and !empty sessionScope.loginUser.userID}">
 					<input id="postPassword"
-					type='hidden' name='postPassword' value='user'>
+					type='hidden' name='postPassword' value='userVO'>
 				</c:if>
 				
 				<c:if test="${empty sessionScope.loginUser or empty sessionScope.loginUser.userID}">

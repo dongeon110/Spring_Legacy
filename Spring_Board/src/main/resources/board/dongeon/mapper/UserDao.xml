@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="board.dongeon.mapper.UserDao">
-    <resultMap type="user" id="userResultMap">
+    <resultMap type="userVO" id="userResultMap">
         <id column="userno" property="userNo"/>
         <result column="userid" property="userID"/>
         <result column="userpassword" property="userPassword"/>
@@ -19,7 +19,7 @@
         FROM users
     </select>
 
-    <insert id="insert" parameterType="user">
+    <insert id="insert" parameterType="userVO">
         INSERT INTO users(userid, userpassword, username, createddate, modifydate)
         VALUES (#{userID}, #{userPassword}, #{userName}, now(), now())
     </insert>

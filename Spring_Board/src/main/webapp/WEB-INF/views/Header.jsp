@@ -18,11 +18,11 @@
 			<a style="color:white;"
 				href="<%=request.getContextPath()%>/auth/login.do">로그인</a>
 			<a style="color:white;"
-				href="<%=request.getContextPath()%>/user/add.do">회원가입</a>
+				href="<%=request.getContextPath()%>/userVO/add.do">회원가입</a>
 		</c:if>
 		<c:if test="${!empty sessionScope.loginUser and !empty sessionScope.loginUser.userID}">
 			<c:if test="${sessionScope.loginUser.grade == 1}">
-				<a style="color:white;" href="<%=request.getContextPath()%>/user/list.do">회원 관리</a>
+				<a style="color:white;" href="<%=request.getContextPath()%>/userVO/list.do">회원 관리</a>
 				${sessionScope.loginUser.userName} [관리자]
 			</c:if>
 			<c:if test="${sessionScope.loginUser.grade != 1}">

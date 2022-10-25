@@ -10,7 +10,7 @@
 
     <typeAliases>
         <typeAlias type="board.dongeon.domain.vo.PostVO" alias="postVO"/>
-        <typeAlias type="board.dongeon.domain.vo.User" alias="user"/>
+        <typeAlias type="board.dongeon.domain.vo.UserVO" alias="userVO"/>
     </typeAliases>
 
 </configuration>

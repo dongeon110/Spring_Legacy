@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
 <%@ include file="../includes/header.jsp" %>
 <% pageContext.setAttribute("replaceChar", "\n"); %>
 
@@ -42,10 +44,15 @@
 													 value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
 					</div>
 
-					<button data-oper="modify"
-							class="btn btn-default">
-						Modify
-					</button>
+					<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="isAuthenticated()">
+						<c:if test="${pinfo.username eq postVO.posterName}">
+							<button data-oper="modify"
+									class="btn btn-default">
+								Modify
+							</button>
+						</c:if>
+					</sec:authorize>
 					<button data-oper="list"
 							class="btn btn-info">
 						<%--                  onclick="location.href='/board/list'">--%>
@@ -78,7 +85,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i> Reply
+				<sec:authorize access="isAuthenticated()">
 				<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+				</sec:authorize>
 			</div>
 
 			<!-- /.panel-heading -->
@@ -251,6 +260,14 @@
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
 
+		var replyer = null;
+
+		<sec:authorize access="isAuthenticated()">
+			replyer = '<sec:authentication property="principal.username"/>';
+		</sec:authorize>
+		var csrfHeaderName="${_csrf.headerName}";
+		var csrfTokenValue="${_csrf.token}";
+
 		$("#modalCloseBtn").on("click", function(e) {
 
 			modal.modal("hide");
@@ -259,12 +276,17 @@
 		$("#addReplyBtn").on("click", function(e){
 
 			modal.find("input").val("");
+			modal.find("input[name='replyer']").val(replyer);
 			modalInputReplyDate.closest("div").hide();
 			modal.find("button[id != 'modalCloseBtn']").hide();
 
 			modalRegisterBtn.show();
 
 			$(".modal").modal("show");
+		});
+
+		$(document).ajaxSend(function(e, xhr, options) {
+			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
 		});
 
 		modalRegisterBtn.on("click", function(e) {
@@ -361,7 +383,7 @@
 	$(document).ready(function() {
 		var operForm = $("#operForm");
 		$("button[data-oper='modify']").on("click", function(e) {
-			operForm.attr("action", "/board/modify").submit();
+			operForm.attr("action", "/board/update").submit();
 		});
 
 		$("button[data-oper='list']").on("click", function(e) {

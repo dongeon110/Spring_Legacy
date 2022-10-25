@@ -48,17 +48,17 @@
 				<th></th>
 			</tr>
 			
-			<c:forEach var="user" items="${userList}">
+			<c:forEach var="userVO" items="${userList}">
 			<tr>
-				<td>${user.userNo}</td>
-				<td><a href='update.do?no=${user.userNo}'>${user.userID}</a></td>
-				<td>${user.userName}</td>
-				<td>${user.createdDate}</td>
+				<td>${userVO.userNo}</td>
+				<td><a href='update.do?no=${userVO.userNo}'>${userVO.userID}</a></td>
+				<td>${userVO.userName}</td>
+				<td>${userVO.createdDate}</td>
 				<td><c:choose>
-					<c:when test='${user.grade == 1}'>관리자</c:when>
+					<c:when test='${userVO.grade == 1}'>관리자</c:when>
 					<c:otherwise>일반</c:otherwise>
 				</c:choose></td>
-				<td><a href='delete.do?userNo=${user.userNo}'>[삭제]</a></td>
+				<td><a href='delete.do?userNo=${userVO.userNo}'>[삭제]</a></td>
 			</tr>
 			</c:forEach>
 		</table>

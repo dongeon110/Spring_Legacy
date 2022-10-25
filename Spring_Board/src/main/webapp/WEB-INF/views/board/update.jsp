@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ include file="../includes/header.jsp" %>
 
 <div class="row">
@@ -23,6 +24,7 @@
 				<!-- /.panel-heading -->
 				<div class="panel-body">
 					<form role="form" action="/board/update" method="post">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<input type='hidden' name="pageNum" value='<c:out value="${searchInfo.pageNum}"/>'>
 						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
 						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
@@ -63,8 +65,13 @@
 								   value='<fmt:formatDate pattern="yyyy/MM/dd" value="${postVO.postUpdateDate}" />' readonly="readonly">
 						</div>
 
-						<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
-						<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+						<sec:authentication property="principal" var="pinfo" />
+						<sec:authorize access="isAuthenticated()">
+							<c:if test="${pinfo.username eq postVO.posterName}">
+								<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
+								<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+							</c:if>
+						</sec:authorize>
 						<button type="submit" data-oper='list' class="btn btn-info">List</button>
 					</form>
 				</div>
