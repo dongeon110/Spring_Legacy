@@ -2,6 +2,7 @@ package board.dongeon.domain.vo;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -12,6 +13,6 @@ public class ReplyVO {
 
     private String reply;
     private String replyer;
-    private Date replyDate;
-    private Date updateDate;
+    private Timestamp replyDate;
+    private Timestamp updateDate;
 }

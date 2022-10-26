@@ -6,12 +6,13 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <bean id="customAccessDenied" class="board.dongeon.security.CustomAccessDeniedHandler" />
-    <bean id="customLoginSuccess" class="board.dongeon.security.CustomLoginSuccessHandler" />
+<!--    <bean id="customLoginSuccess" class="board.dongeon.security.CustomLoginSuccessHandler" />-->
 <!--    <bean id="customPasswordEncoder" class="board.dongeon.security.CustomNoOpPasswordEncoder" />-->
     <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
     <bean id="customUserDetailsService" class="board.dongeon.security.CustomUserDetailsService"/>
 
-    <security:http auto-config="true" use-expressions="true">
+<!--    <security:http auto-config="true" use-expressions="true">-->
+    <security:http>
         <security:intercept-url pattern="/auth/all" access="permitAll" />
         <security:intercept-url pattern="/auth/member" access="hasRole('ROLE_MEMBER')"/> <!-- ROLE_MEMBER 라는 권한이 있는 사용자만 접근 가능 -->
         <security:intercept-url pattern="/auth/admin" access="hasRole('ROLE_ADMIN')" />
@@ -19,7 +20,7 @@
 <!--        <security:access-denied-handler error-page="/accessError" />-->
         <security:access-denied-handler ref="customAccessDenied" />
 
-        <security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" />
+        <security:form-login login-page="/customLogin" />
         <security:logout logout-url="/customLogout" invalidate-session="true"
         delete-cookies="remember-me, JSESSION_ID"/>
 

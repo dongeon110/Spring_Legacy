@@ -11,8 +11,8 @@
         <result column="PTEXT" property="postText"/>
         <result column="PPWD" property="postPassword"/>
         <result column="POSTERNAME" property="posterName"/>
-        <result column="CRE_DATE" property="postCreatedDate" javaType="java.sql.Date"/>
-        <result column="MOD_DATE" property="postUpdateDate" javaType="java.sql.Date"/>
+        <result column="CRE_DATE" property="postCreatedDate" javaType="java.sql.Timestamp"/>
+        <result column="MOD_DATE" property="postUpdateDate" javaType="java.sql.Timestamp"/>
         <result column="REPOST" property="repost"/>
         <result column="PVIEWS" property="postViews"/>
         <result column="ROWNUM" property="rowNum"/>

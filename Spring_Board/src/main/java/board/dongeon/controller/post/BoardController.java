@@ -39,6 +39,7 @@ public class BoardController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()")
     public String add(PostVO postVO, RedirectAttributes rttr) {
         log.info("==========================");
         log.info("add: " + postVO);
@@ -58,11 +59,13 @@ public class BoardController {
     public void view(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, Model model) {
         log.info("/view");
         model.addAttribute("postVO", service.get(pno));
+        log.info("postVO" + service.get(pno));
     }
 
-    @PreAuthorize("principal.username == #postVO.posterName")
+//    @PreAuthorize("principal.username == #postVO.posterName")
     @PostMapping("/update")
-    public String update(PostVO postVO, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
+//    public String update(PostVO postVO, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
+    public String update(PostVO postVO, SearchInfo searchInfo, RedirectAttributes rttr) {
         log.info("update: " + postVO);
 
         if(service.modify(postVO)) {
@@ -74,15 +77,16 @@ public class BoardController {
 
     @PreAuthorize("principal.username == #posterName")
     @PostMapping("/remove")
-    public String remove(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
+//    public String remove(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
+    public String remove(@RequestParam("postNo") int pno, SearchInfo searchInfo, RedirectAttributes rttr, String posterName) {
+
         log.info("remove..." + pno);
+
         if (service.remove(pno)) {
             rttr.addFlashAttribute("result", "success");
         }
 
         return "redirect:/board/list" + searchInfo.getListLink();
     }
-
-
 
 }

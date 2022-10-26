@@ -51,7 +51,7 @@
 								${postVO.posterName}
 							</td>
 
-							<td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${postVO.postCreatedDate}"/></td>
+							<td><fmt:formatDate pattern="yyyy-MM-dd aa hh:mm" value="${postVO.postCreatedDate}"/></td>
 						</tr>
 					</c:forEach>
 				</table>

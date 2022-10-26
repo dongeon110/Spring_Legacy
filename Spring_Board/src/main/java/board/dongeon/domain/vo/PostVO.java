@@ -1,5 +1,6 @@
 package board.dongeon.domain.vo;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -14,8 +15,8 @@ public class PostVO {
     private String postText;
     private String postPassword;
     private String posterName;
-    private Date postCreatedDate;
-    private Date postUpdateDate;
+    private Timestamp postCreatedDate;
+    private Timestamp postUpdateDate;
     private int repost;
     private int postViews;
     private int postUserNo;

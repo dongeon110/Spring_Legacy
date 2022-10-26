@@ -6,7 +6,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Post Update / Board Modify</h1>
+		<h1 class="page-header">Post Update</h1>
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -16,11 +16,11 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 
-			<div class="panel-heading">Post Update / Board Modify Page</div>
+			<div class="panel-heading">Post Update</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 
-				<div class="panel-heading">Post Update / Board Modify Page</div>
+				<div class="panel-heading">Post Update</div>
 				<!-- /.panel-heading -->
 				<div class="panel-body">
 					<form role="form" action="/board/update" method="post">
@@ -32,8 +32,8 @@
 
 						<div class="form-group">
 							<label>PostNo</label>
-							<input class="form-control" name="pno"
-								   value='<c:out value="${postVO.pno }"/>' readonly="readonly">
+							<input class="form-control" name="postNo"
+								   value='<c:out value="${postVO.postNo }"/>' readonly="readonly">
 						</div>
 
 						<div class="form-group">
@@ -49,7 +49,7 @@
 
 						<div class="form-group">
 							<label>Writer</label>
-							<input class="form-control" name="writer"
+							<input class="form-control" name="posterName"
 								   value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
 						</div>
 

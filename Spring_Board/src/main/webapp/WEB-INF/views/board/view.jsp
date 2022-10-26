@@ -60,7 +60,7 @@
 					</button>
 
 					<form id="operForm" action="/board/modify" method="get">
-						<input type='hidden' id='postNo' name='postNo' value='<c:out value="${postVO.postNo}"/>'>
+						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
 						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
 						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
 						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
@@ -125,7 +125,7 @@
 
 				<div class="form-group">
 					<label>Replyer</label>
-					<input class="form-control" name="replyer" value="replyer">
+					<input class="form-control" name="replyer" value="replyer" readonly="readonly">
 				</div>
 
 				<div class="form-group">
@@ -174,18 +174,25 @@
 					return;
 				}
 
+				if(replyCnt == 0 && pageNum > 1) {
+					showList(pageNum-1);
+					return;
+				} else if (replyCnt == 0) {
+					showList(1);
+					return;
+				}
+
 				var str="";
 
 				if(list == null || list.length == 0) {
 					// replyUL.html("");
-
 					return;
 				}
 
 				for (var i=0, len=list.length || 0; i<len; i++) {
 					str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 					str +="  <div><div class='header'><strong class='primary-font'>[" // 댓글 순서 번호 rno
-							+list[i].rno+"] "+list[i].replyer+"</strong>";
+							+((page-1)*10 + i+1)+"] "+list[i].replyer+"</strong>";
 					str +="    <small class='pull-right text-muted'>"
 							+replyService.displayTime(list[i].replyDate)+"</small></div>";
 					str +="    <p>"+list[i].reply+"</p></div></li>";
@@ -224,11 +231,11 @@
 			for(var i = startNum; i <= endNum; i++) {
 				var active = pageNum == i? "active":"";
 
-				str+= "<li class='page-item "+ active + " '><a class='page-link' href='" + i + "'>Next</a></li>";
+				str+= "<li class='page-item "+ active + " '><a class='page-link' href='" + i + "'>이전</a></li>";
 			}
 
 			if(next) {
-				str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+				str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>다음</a></li>";
 			}
 
 			str += "</ul></div>";
@@ -260,13 +267,7 @@
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
 
-		var replyer = null;
 
-		<sec:authorize access="isAuthenticated()">
-			replyer = '<sec:authentication property="principal.username"/>';
-		</sec:authorize>
-		var csrfHeaderName="${_csrf.headerName}";
-		var csrfTokenValue="${_csrf.token}";
 
 		$("#modalCloseBtn").on("click", function(e) {
 
@@ -307,11 +308,12 @@
 		});
 
 
+		// 댓글 클릭 이벤트 처리
 		$(".chat").on("click", "li", function(e) {
 
 			var rno = $(this).data("rno");
 
-			replyService.get(rno, function(reply) {
+			replyService.get(rno, function (reply) {
 				modalInputReply.val(reply.reply);
 				modalInputReplyer.val(reply.replyer);
 				modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly", "readonly");
@@ -324,35 +326,79 @@
 				$(".modal").modal("show");
 
 			});
+		});
 
 			// 댓글 수정
-			modalModBtn.on("click", function(e) {
-				var reply = {
-					reply: modalInputReply.val(),
-					rno: modal.data("rno")
-				};
+		modalModBtn.on("click", function(e) {
 
-				replyService.update(reply, function(result) {
-					alert(result);
-					modal.modal("hide");
-					showList(pageNum);
+			var originalReplyer = modalInputReplyer.val();
 
-				});
+			var reply = {
+				reply: modalInputReply.val(),
+				rno: modal.data("rno"),
+				replyer: originalReplyer
+			};
 
-			});
+			if(!replyer) {
+				alert("로그인 후 수정이 가능합니다.");
+				modal.modal("hide");
+				return;
+			}
 
-			// 댓글 삭제
-			modalRemoveBtn.on("click", function(e) {
-				var rno = modal.data("rno");
+			console.log("Original Replyer: " + originalReplyer);
 
-				replyService.remove(rno, function(result) {
-					alert(result);
-					modal.modal("hide");
-					showList(pageNum);
-				});
+			if(replyer != originalReplyer) {
+				alert("자신이 작성한 댓글만 수정가능합니다");
+				modal.modal("hide");
+				return;
+			}
+
+			replyService.update(reply, function(result) {
+				alert(result);
+				modal.modal("hide");
+				showList(pageNum);
+
 			});
 
 		});
+
+		// 댓글 삭제
+		modalRemoveBtn.on("click", function(e) {
+			var rno = modal.data("rno");
+
+			console.log("RNO: " + rno);
+			console.log("REPLYER: " + replyer);
+
+			if(!replyer) {
+				alert("로그인 후 삭제가 가능합니다.");
+				modal.modal("hide");
+				return;
+			}
+
+			var originalReplyer = modalInputReplyer.val();
+
+			console.log("Original Replyer: " + originalReplyer); // 기존 댓글 작성자
+
+			if (replyer != originalReplyer) {
+				alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+				modal.modal("hide");
+				return;
+			}
+
+			replyService.remove(rno, originalReplyer, function(result) {
+				alert(result);
+				modal.modal("hide");
+				showList(pageNum);
+			});
+		});
+
+		var replyer = null;
+
+		<sec:authorize access="isAuthenticated()">
+		replyer = '<sec:authentication property="principal.username"/>';
+		</sec:authorize>
+		var csrfHeaderName="${_csrf.headerName}";
+		var csrfTokenValue="${_csrf.token}";
 
 	});
 

@@ -41,10 +41,15 @@ var replyService = (function(){ // ( )안에서 선언된 함수 = 즉시 실행
                 });
         }
 
-        function remove(rno, callback, error) {
+        function remove(rno, replyer, callback, error) {
                 $.ajax({
                         type:'delete',
                         url:'/replies/' + rno,
+
+                        data: JSON.stringify({rno:rno, replyer:replyer}),
+
+                        contentType: "application/json; charset=utf-8",
+
                         success: function(deleteResult, status, xhr) {
                                 if (callback) {
                                         callback(deleteResult);
@@ -104,8 +109,20 @@ var replyService = (function(){ // ( )안에서 선언된 함수 = 즉시 실행
                         var mm = dateObj.getMinutes();
                         var ss = dateObj.getSeconds();
 
-                        return [ (hh > 9 ? '' : '0') + hh, ':', (mm > 9 ? '' : '0') + mm, ':'
-                        , (ss > 9 ? '' : '0') + ss ].join('');
+                        if (hh > 12) {
+                                return [ 'PM ' + (hh-12 > 9 ? '' : '0') + (hh-12), ':', (mm > 9 ? '' : '0') + mm, ':'
+                                        , (ss > 9 ? '' : '0') + ss ].join('');
+                        } else if (hh === 12) {
+                                return [ 'PM ' + '12', ':', (mm > 9 ? '' : '0') + mm, ':'
+                                        , (ss > 9 ? '' : '0') + ss ].join('');
+                        } else if (hh === 0) {
+                                return [ 'AM ' + '12', ':', (mm > 9 ? '' : '0') + mm, ':'
+                                        , (ss > 9 ? '' : '0') + ss ].join('');
+                        } else {
+                                return [ 'AM ' + (hh > 9 ? '' : '0') + hh, ':', (mm > 9 ? '' : '0') + mm, ':'
+                                        , (ss > 9 ? '' : '0') + ss ].join('');
+                        }
+
                 } else {
                         var yy = dateObj.getFullYear();
                         var mm = dateObj.getMonth() + 1; // getMonth() 는 0부터 시작함
