@@ -34,7 +34,7 @@
 							<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
 							<td>
 								<c:forEach var="i" begin="0" end="${postVO.redepth}">
-									&nbsp&nbsp
+									&nbsp&nbsp&nbsp
 								</c:forEach>
 								<c:if test="${postVO.redepth != 0}" var="re">
 									<span class="badge badge-primary">[Re]</span>
