@@ -13,7 +13,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">Board List Page
+			<div class="panel-heading">Board List Page 
 				<button id="regBtn" type="button" class="btn btn-xs pull-right">Register New Board</button>
 			</div>
 			<!-- /.panel-heading -->
