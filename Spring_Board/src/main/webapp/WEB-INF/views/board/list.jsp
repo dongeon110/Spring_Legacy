@@ -31,23 +31,23 @@
 				
 					<c:forEach var="postVO" items="${postVOs}">
 						<tr>
-							<td>${postVO.postNo}</td>
+							<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
 							<td>
-								<c:if test="${postVO.repost != postVO.postNo}" var="re">
-								┌[RE:]
+								<c:forEach var="i" begin="0" end="${postVO.redepth}">
+									&nbsp&nbsp
+								</c:forEach>
+								<c:if test="${postVO.redepth != 0}" var="re">
+									<span class="badge badge-primary">[Re]</span>
 								</c:if>
 								<a class="move" href='<c:out value="${postVO.postNo}"/>'>
-										${postVO.postSubject}
+									${postVO.postSubject}
+<%--										<c:if test="">--%>
+<%--											<span class="badge badge-danger">new</span>--%>
+<%--										</c:if>--%>
 								</a>
 							</td>
 							<td>${postVO.postViews}</td>
 							<td>
-								<c:if test="${postVO.postUserNo != null and postVO.postUserNo !=''}">
-									<c:if test="${postVO.postPassword == '1'}">
-										<span style="color:red">[관리자]</span></c:if>
-									<c:if test="${postVO.postPassword == '2'}">
-										<span style="color:blue">[사용자]</span></c:if>
-								</c:if>
 								${postVO.posterName}
 							</td>
 
@@ -82,14 +82,14 @@
 				<div class='pull-right'>
 					<ul class='pagination'>
 						<c:if test='${pageMaker.prev}'>
-							<li class="paginate_button previous"><a href='${pageMaker.startPage-1}'>&lt;이전&gt;</a></li>
+							<li class="paginate_button previous"><a href='${pageMaker.startPage-1}'>이전</a></li>
 						</c:if>
 						<c:forEach var='num' begin='${pageMaker.startPage}' end='${pageMaker.endPage}'>
 							<li class="paginate_button  ${pageMaker.searchInfo.pageNum == num? "active":""} ">
-								<a href='${num}'>&lt;${num}&gt;</a></li>
+								<a href='${num}'>${num}</a></li>
 						</c:forEach>
 						<c:if test='${pageMaker.next}'>
-							<li class="paginate_button next"><a href='${pageMaker.endPage+1}'>&lt;다음&gt;</a></li>
+							<li class="paginate_button next"><a href='${pageMaker.endPage+1}'>다음</a></li>
 						</c:if>
 					</ul>
 				</div>

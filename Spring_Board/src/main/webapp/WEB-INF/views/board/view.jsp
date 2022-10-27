@@ -24,23 +24,23 @@
 
 				<div class="panel-body">
 					<div class="form-group">
-						<label>Pno</label> <input class="form-control" name="pno"
+						<input class="form-control" name="pno" type="hidden"
 												  value='<c:out value="${postVO.postNo}"/>' readonly="readonly">
 					</div>
 
 					<div class="form-group">
-						<label>Title</label> <input class="form-control" name="postSubject"
+						<label>제목</label> <input class="form-control" name="postSubject"
 													value='<c:out value="${postVO.postSubject}"/>' readonly="readonly">
 					</div>
 
 					<div class="form-group">
-						<label>Text area</label>
+						<label>내용</label>ㅉ
 						<textarea class="form-control" rows="3" name="postText"
 								  readonly="readonly"><c:out value="${postVO.postText}"/></textarea>
 					</div>
 
 					<div class="form-group">
-						<label>Writer</label> <input class="form-control" name="posterName"
+						<label>작성자</label> <input class="form-control" name="posterName"
 													 value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
 					</div>
 
@@ -49,17 +49,37 @@
 						<c:if test="${pinfo.username eq postVO.posterName}">
 							<button data-oper="modify"
 									class="btn btn-default">
-								Modify
+								수정/삭제
+							</button>
+						</c:if>
+						<c:if test="${postVO.redepth <= 2 and postVO.redepth >=0}">
+						<button data-oper="addrepost"
+								class="btn btn-default">
+							답글달기
+						</button>
+						</c:if>
+						<c:if test="${postVO.redepth == 3}">
+							<button data-oper="addrepostblock"
+									class="btn btn-default">
+								답글달기
 							</button>
 						</c:if>
 					</sec:authorize>
 					<button data-oper="list"
 							class="btn btn-info">
 						<%--                  onclick="location.href='/board/list'">--%>
-						List
+						목록
 					</button>
 
 					<form id="operForm" action="/board/modify" method="get">
+						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
+						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
+					</form>
+
+					<form id="operForm" action="/board/addrepost" method="get">
 						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
 						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
 						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
@@ -84,9 +104,9 @@
 		<!-- /.panel -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<i class="fa fa-comments fa-fw"></i> Reply
+				<i class="fa fa-comments fa-fw"></i> 댓글
 				<sec:authorize access="isAuthenticated()">
-				<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+				<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">댓글 쓰기</button>
 				</sec:authorize>
 			</div>
 
@@ -178,7 +198,6 @@
 					showList(pageNum-1);
 					return;
 				} else if (replyCnt == 0) {
-					showList(1);
 					return;
 				}
 
@@ -430,6 +449,15 @@
 		var operForm = $("#operForm");
 		$("button[data-oper='modify']").on("click", function(e) {
 			operForm.attr("action", "/board/update").submit();
+		});
+
+		$("button[data-oper='addrepost']").on("click", function(e) {
+
+			operForm.attr("action", "/board/addrepost").submit();
+		});
+		$("button[data-oper='addrepostblock']").on("click", function(e) {
+
+			alert("답글의 최대 depth는 3");
 		});
 
 		$("button[data-oper='list']").on("click", function(e) {

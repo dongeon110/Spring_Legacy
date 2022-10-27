@@ -55,4 +55,10 @@ public class BoardServiceImpl implements BoardService {
         log.info("BoardServiceImpl remove pno: " + pno);
         return postDao.delete(pno) == 1;
     }
+
+    @Override
+    public void addRepost(PostVO postVO) { // 답글 추가
+        log.info("BoardServiceImpl addRepost postVO: " + postVO);
+        postDao.insertRepost(postVO);
+    }
 }

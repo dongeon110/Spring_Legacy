@@ -22,6 +22,7 @@
 <!-- Custom Theme JavaScript -->
 <script src="/resources/dist/js/sb-admin-2.js"></script>
 
+
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 
 <script>

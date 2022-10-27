@@ -29,6 +29,8 @@ public class BoardController {
         int total = service.getTotal(searchInfo);
         log.info("total: " + total);
         model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
+
+
     }
 
 
@@ -87,6 +89,32 @@ public class BoardController {
         }
 
         return "redirect:/board/list" + searchInfo.getListLink();
+    }
+
+
+    @GetMapping("/addrepost")
+    @PreAuthorize("isAuthenticated()")
+    public void addrepost(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, Model model) {
+        log.info("/addrepost");
+        model.addAttribute("originpostVO", service.get(pno));
+        log.info("originpostVO" + service.get(pno));
+    }
+
+    @PostMapping("/addrepost")
+    @PreAuthorize("isAuthenticated()")
+    public String addrepost(PostVO postVO, RedirectAttributes rttr) {
+        log.info("==========================");
+        log.info("add repost: " + postVO);
+
+        // 파일 업로드
+//        if (postVO.getAttachList() != null) {
+//            postVO.getAttachList().forEach(attach -> log.info(attach));
+//        }
+
+        log.info("==========================");
+        service.addRepost(postVO);
+        rttr.addFlashAttribute("result", postVO.getPostNo());
+        return "redirect:/board/list";
     }
 
 }

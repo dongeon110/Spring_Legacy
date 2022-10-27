@@ -13,11 +13,13 @@ public class PostVO {
     private int postNo;
     private String postSubject;
     private String postText;
-    private String postPassword;
     private String posterName;
     private Timestamp postCreatedDate;
     private Timestamp postUpdateDate;
-    private int repost;
     private int postViews;
-    private int postUserNo;
+
+    private int regroup;
+    private int redepth;
+    private int reorder;
+    private boolean enabled;
 }

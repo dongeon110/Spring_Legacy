@@ -1,0 +1,1 @@
+ALTER TABLE board ADD CONSTRAINT redepth_max CHECK(redepth < 4 AND redepth >= 0)

@@ -18,4 +18,6 @@ public interface BoardService {
     public boolean modify(PostVO postVO); // 게시물 수정
     
     public boolean remove(int pno); // 게시물 삭제
+    
+    public void addRepost(PostVO postVO); // 답글 추가
 }

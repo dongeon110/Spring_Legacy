@@ -20,7 +20,6 @@
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 
-				<div class="panel-heading">Post Update</div>
 				<!-- /.panel-heading -->
 				<div class="panel-body">
 					<form role="form" action="/board/update" method="post">
@@ -31,36 +30,35 @@
 						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
 
 						<div class="form-group">
-							<label>PostNo</label>
-							<input class="form-control" name="postNo"
+							<input class="form-control" name="postNo" type="hidden"
 								   value='<c:out value="${postVO.postNo }"/>' readonly="readonly">
 						</div>
 
 						<div class="form-group">
-							<label>Title</label>
+							<label>제목</label>
 							<input class="form-control" name="postSubject"
 								   value='<c:out value="${postVO.postSubject }"/>' >
 						</div>
 
 						<div class="form-group">
-							<label>Text area</label>
+							<label>내용</label>
 							<textarea class="form-control" rows="3" name="postText" ><c:out value="${postVO.postText }"/></textarea>
 						</div>
 
 						<div class="form-group">
-							<label>Writer</label>
+							<label>작성자 ID</label>
 							<input class="form-control" name="posterName"
 								   value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
 						</div>
 
 						<div class="form-group">
-							<label>RegDate</label>
+							<label>최초 작성일</label>
 							<input class="form-control" name='regDate'
 								   value='<fmt:formatDate pattern="yyyy/MM/dd" value="${postVO.postCreatedDate}" />' readonly="readonly">
 						</div>
 
 						<div class="form-group">
-							<label>Update Date</label>
+							<label>최근 수정일</label>
 							<input class="form-control" name='updateDate'
 								   value='<fmt:formatDate pattern="yyyy/MM/dd" value="${postVO.postUpdateDate}" />' readonly="readonly">
 						</div>
@@ -68,11 +66,11 @@
 						<sec:authentication property="principal" var="pinfo" />
 						<sec:authorize access="isAuthenticated()">
 							<c:if test="${pinfo.username eq postVO.posterName}">
-								<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
-								<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+								<button type="submit" data-oper='modify' class="btn btn-default">수정</button>
+								<button type="submit" data-oper='remove' class="btn btn-danger">삭제</button>
 							</c:if>
 						</sec:authorize>
-						<button type="submit" data-oper='list' class="btn btn-info">List</button>
+						<button type="submit" data-oper='list' class="btn btn-info">목록</button>
 					</form>
 				</div>
 			</div>

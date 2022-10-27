@@ -1,0 +1,3 @@
+ALTER TABLE board DROP COLUMN ppwd;
+ALTER TABLE board DROP COLUMN repost;
+ALTER TABLE board DROP COLUMN byuser;
