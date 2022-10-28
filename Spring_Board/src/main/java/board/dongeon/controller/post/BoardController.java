@@ -12,6 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 @Controller
 @Log4j
 @RequestMapping("/board/*")
@@ -22,13 +26,36 @@ public class BoardController {
 
     @GetMapping("/list")
     public void list(SearchInfo searchInfo, Model model) {
+        
+        // 삭제되지 않은 게시물들
         log.info("postVOs: " + searchInfo);
-        model.addAttribute("postVOs", service.getList(searchInfo));
+        List<PostVO> getlist = service.getList(searchInfo);
+//        int startIndex;
+//        int lastIndex = getlist.size();
+//        if (searchInfo.getPageNum() == 1) {
+//            startIndex = 0;
+//        } else {
+//            startIndex = 1;
+//        }
 
-        // 총 게시물 수
+        model.addAttribute("postVOs", getlist);
+
+        // 삭제되지 않은 총 게시물 수
         int total = service.getTotal(searchInfo);
         log.info("total: " + total);
         model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
+
+//        PostVO firstpost;
+//        PostVO lastpost;
+//        if(searchInfo.getPageNum() == 1) {
+//            firstpost = getlist.get(0);
+//        } else {
+//            firstpost = getlist.get(1);
+//        }
+//        lastpost = getlist.get(getlist.size());
+
+
+
 
 
     }
@@ -58,11 +85,26 @@ public class BoardController {
     }
 
     @GetMapping({"/view", "/update"})
-    public void view(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, Model model) {
+    public void view(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo,
+                     Model model, @CookieValue(value="viewcookie", defaultValue = "0", required = true) String cookievalue) {
         log.info("/view");
         model.addAttribute("postVO", service.get(pno));
         log.info("postVO" + service.get(pno));
+
+//        /* 조회수 */
+//        String pnoValue = "[" + pno + "]";
+//        boolean isView = cookievalue.contains(pnoValue);
+//        if(!isView) {
+//            cookievalue += pnoValue;
+//            Cookie cookie = new Cookie("viewcookie", cookievalue);
+//            cookie.setMaxAge(60); // second
+//            response.addCookie(cookie);
+//        }
+
+//        /* 조회수 end */
     }
+
+
 
 //    @PreAuthorize("principal.username == #postVO.posterName")
     @PostMapping("/update")
@@ -77,7 +119,7 @@ public class BoardController {
         return "redirect:/board/list" + searchInfo.getListLink();
     }
 
-    @PreAuthorize("principal.username == #posterName")
+    @PreAuthorize("principal.username == #posterName") // #을 앞에 붙이면 파라미터에 접근할 수 있음
     @PostMapping("/remove")
 //    public String remove(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
     public String remove(@RequestParam("postNo") int pno, SearchInfo searchInfo, RedirectAttributes rttr, String posterName) {

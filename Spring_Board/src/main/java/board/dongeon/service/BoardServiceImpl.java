@@ -33,6 +33,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void increaseViews(int pno) {  // 게시물 조회수 증가
+        log.info("BoardServiceImpl increaseView pno: " + pno);
+        postDao.increaseViews(pno);
+    }
+
+
+    @Override
     public int getTotal(SearchInfo searchInfo) { // 게시물 총 개수
         log.info("BoardServiceImpl getTotal count");
         return postDao.getTotalCount(searchInfo);
