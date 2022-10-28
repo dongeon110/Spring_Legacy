@@ -29,30 +29,15 @@ public class BoardController {
         
         // 삭제되지 않은 게시물들
         log.info("postVOs: " + searchInfo);
-        List<PostVO> getlist = service.getList(searchInfo);
-//        int startIndex;
-//        int lastIndex = getlist.size();
-//        if (searchInfo.getPageNum() == 1) {
-//            startIndex = 0;
-//        } else {
-//            startIndex = 1;
-//        }
 
-        model.addAttribute("postVOs", getlist);
+        model.addAttribute("postVOs", service.getList(searchInfo));
 
         // 삭제되지 않은 총 게시물 수
         int total = service.getTotal(searchInfo);
         log.info("total: " + total);
         model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
 
-//        PostVO firstpost;
-//        PostVO lastpost;
-//        if(searchInfo.getPageNum() == 1) {
-//            firstpost = getlist.get(0);
-//        } else {
-//            firstpost = getlist.get(1);
-//        }
-//        lastpost = getlist.get(getlist.size());
+
 
 
 

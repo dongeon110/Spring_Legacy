@@ -34,7 +34,7 @@
 					</div>
 
 					<div class="form-group">
-						<label>내용</label>ㅉ
+						<label>내용</label>
 						<textarea class="form-control" rows="3" name="postText"
 								  readonly="readonly"><c:out value="${postVO.postText}"/></textarea>
 					</div>
@@ -53,10 +53,10 @@
 							</button>
 						</c:if>
 						<c:if test="${postVO.redepth <= 2 and postVO.redepth >=0}">
-						<button data-oper="addrepost"
-								class="btn btn-default">
-							답글달기
-						</button>
+							<button data-oper="addrepost"
+									class="btn btn-default">
+								답글달기
+							</button>
 						</c:if>
 						<c:if test="${postVO.redepth == 3}">
 							<button data-oper="addrepostblock"
