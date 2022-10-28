@@ -29,17 +29,22 @@ public class BoardController {
         
         // 삭제되지 않은 게시물들
         log.info("postVOs: " + searchInfo);
+        List<PostVO> postVOs = service.getList(searchInfo);
 
-        model.addAttribute("postVOs", service.getList(searchInfo));
+        model.addAttribute("postVOs", postVOs);
 
         // 삭제되지 않은 총 게시물 수
         int total = service.getTotal(searchInfo);
         log.info("total: " + total);
         model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
 
-
-
-
+//        // 원글 삭제 표시
+//        if (searchInfo.getType() == null) {
+//            // ROW NUMBER 1~10
+//            // UNION ALL -> ORDER BY
+//            // DEPTH -1 ORDER가 있으면
+//
+//        }
 
 
 
@@ -77,6 +82,7 @@ public class BoardController {
         log.info("postVO" + service.get(pno));
 
 //        /* 조회수 */
+        service.increaseViews(pno);
 //        String pnoValue = "[" + pno + "]";
 //        boolean isView = cookievalue.contains(pnoValue);
 //        if(!isView) {

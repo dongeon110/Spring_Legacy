@@ -18,6 +18,7 @@
         <result column="REDEPTH" property="redepth"/>
         <result column="REORDER" property="reorder"/>
         <result column="ENABLED" property="enabled"/>
+        <result column="CNTREPLY" property="cntReply"/>
     </resultMap>
 
     <sql id="searchinfo">
@@ -38,9 +39,13 @@
         </trim>
     </sql>
 
+    <sql id="isdeleted">
+        SELECT
+    </sql>
+
 
     <select id="searchList" parameterType="map" resultMap="postVOResultMap">
-        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED
+        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
         FROM
             ( -- Paging 처리하기 위한 ROWNUM 추가
                 SELECT (ROW_NUMBER() OVER()) AS rn, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED
@@ -54,6 +59,9 @@
                         ORDER BY regroup DESC, reorder ASC
                     ) AS SEARCHBOARD
             ) AS ORDERBOARD
+            LEFT JOIN
+                (SELECT PNO AS PNO2, COUNT(*) AS CNTREPLY FROM REPLY GROUP BY PNO2) AS JOINBOARD
+                ON PNO = PNO2
         -- Paging
         <![CDATA[
         WHERE rn > (#{pageNum}-1)*#{amount} AND rn <= #{pageNum}*#{amount}

@@ -41,10 +41,10 @@
 								</c:if>
 								<a class="move" href='<c:out value="${postVO.postNo}"/>'>
 									${postVO.postSubject}
-<%--										<c:if test="">--%>
-<%--											<span class="badge badge-danger">new</span>--%>
-<%--										</c:if>--%>
 								</a>
+								<c:if test="${postVO.cntReply > 0}">
+									<span style="color:red;">&nbsp[${postVO.cntReply}]</span>
+								</c:if>
 							</td>
 							<td>${postVO.postViews}</td>
 							<td>

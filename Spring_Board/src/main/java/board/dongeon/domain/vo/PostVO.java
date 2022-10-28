@@ -22,4 +22,7 @@ public class PostVO {
     private int redepth;
     private int reorder;
     private boolean enabled;
+
+    private int cntReply;
+    private int cntRepost;
 }

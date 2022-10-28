@@ -43,4 +43,5 @@ public class ReplyServiceImpl implements ReplyService {
     public int remove(int rno) {
         return replyDao.delete(rno);
     }
+
 }

@@ -38,4 +38,5 @@
     <select id="getCountByPno" resultType="int">
         SELECT COUNT(*) FROM reply WHERE pno = #{pno}
     </select>
+
 </mapper>

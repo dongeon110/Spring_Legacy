@@ -22,4 +22,5 @@ public interface ReplyDao {
             @Param("pno") int pno);
 
     public int getCountByPno(int pno);
+
 }
