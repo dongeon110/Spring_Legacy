@@ -39,10 +39,6 @@
         </trim>
     </sql>
 
-    <sql id="isdeleted">
-        SELECT
-    </sql>
-
 
     <select id="searchList" parameterType="map" resultMap="postVOResultMap">
         SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
@@ -111,9 +107,9 @@
 
 
     <select id="selectOne" parameterType="int" resultMap="postVOResultMap">
-        SELECT PNO, PSUBJECT, PTEXT, POSTERNAME, CRE_DATE, MOD_DATE, PVIEWS, REGROUP, REDEPTH, REORDER
+        SELECT PNO, PSUBJECT, PTEXT, POSTERNAME, CRE_DATE, MOD_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED
         FROM BOARD
-        WHERE PNO=#{postNo} AND ENABLED ='T'
+        WHERE PNO=#{postNo}
     </select>
 
 <!--    <select id="checkPw" parameterType="postVO" resultType="int">-->
@@ -136,6 +132,10 @@
         UPDATE BOARD SET ENABLED='F' WHERE PNO=#{postNo}
     </update>
 
+    <update id="restorePost" parameterType="int">
+        UPDATE BOARD SET ENABLED='T' WHERE PNO=#{postNo}
+    </update>
+
     <insert id="insertRepost" parameterType="postVO">
         BEGIN;
             UPDATE board SET REORDER = REORDER+1 WHERE REGROUP=#{regroup} AND REORDER >= #{reorder};
@@ -145,7 +145,6 @@
                  NOW(), NOW(), #{regroup}, #{redepth}, #{reorder});
         END;
     </insert>
-
 
     <update id="increaseViews" parameterType="int">
         UPDATE BOARD SET PVIEWS = PVIEWS + 1 WHERE PNO = #{postNo} AND ENABLED = 'T'
@@ -167,6 +166,7 @@
             PNO > 0
         ]]>
     </select>
+
 
     <select id="superisdeleted" parameterType="int" resultMap="postVOResultMap">
 

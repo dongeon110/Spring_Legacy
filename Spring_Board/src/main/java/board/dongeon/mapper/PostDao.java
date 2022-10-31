@@ -29,6 +29,8 @@ public interface PostDao {
     // 게시글 삭제
     public int delete(int postNo);
 
+    public int restorePost(int postNo);
+
     // 답글 달기
     public int insertRepost(PostVO repostVO);
 //    public int repostbyUser(PostVO repostVO);

@@ -67,6 +67,14 @@
 							</button>
 						</c:if>
 					</sec:authorize>
+					<sec:authorize access="${isadmin}">
+						<c:if test="${!postVO.enabled}">
+							<button data-oper="restorepost"
+									class="btn btn-default">
+								복구하기
+							</button>
+						</c:if>
+					</sec:authorize>
 					<button data-oper="list"
 							class="btn btn-info">
 						<%--                  onclick="location.href='/board/list'">--%>
@@ -83,6 +91,15 @@
 
 					<form id="operForm" action="/board/addrepost" method="get">
 						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
+						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
+					</form>
+
+					<form id="operFormPost" action="/board/restore" method="post">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type='hidden' id='pno' name='postNo' value='<c:out value="${postVO.postNo}"/>'>
 						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
 						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
 						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
@@ -449,6 +466,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		var operForm = $("#operForm");
+		var operFormPost = $("#operFormPost");
 		$("button[data-oper='modify']").on("click", function(e) {
 			operForm.attr("action", "/board/update").submit();
 		});
@@ -466,6 +484,10 @@
 			operForm.find("#pno").remove();
 			operForm.attr("action", "/board/list")
 			operForm.submit();
+		});
+
+		$("button[data-oper='restorepost']").on("click", function(e) {
+			operFormPost.attr("action", "/board/restore").submit();
 		});
 
 		console.log(replyService);

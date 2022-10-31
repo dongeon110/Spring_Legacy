@@ -125,9 +125,7 @@ public class BoardController {
     @PostMapping("/remove")
 //    public String remove(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
     public String remove(@RequestParam("postNo") int pno, SearchInfo searchInfo, RedirectAttributes rttr, String posterName) {
-
         log.info("remove..." + pno);
-
         if (service.remove(pno)) {
             rttr.addFlashAttribute("result", "success");
         }
@@ -135,6 +133,16 @@ public class BoardController {
         return "redirect:/board/list" + searchInfo.getListLink();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/restore")
+    public String restore(@RequestParam("postNo") int pno, SearchInfo searchInfo, RedirectAttributes rttr) {
+        log.info("restore..." + pno);
+        if (service.restore(pno)) {
+            rttr.addFlashAttribute("result", "success");
+        }
+
+        return "redirect:/board/adminlist" + searchInfo.getListLink();
+    }
 
     @GetMapping("/addrepost")
     @PreAuthorize("isAuthenticated()")

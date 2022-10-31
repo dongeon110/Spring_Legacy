@@ -11,6 +11,7 @@
     <typeAliases>
         <typeAlias type="board.dongeon.domain.vo.PostVO" alias="postVO"/>
         <typeAlias type="board.dongeon.domain.vo.UserVO" alias="userVO"/>
+        <typeAlias type="board.dongeon.domain.vo.MemberVO" alias="memberVO"/>
     </typeAliases>
 
 </configuration>

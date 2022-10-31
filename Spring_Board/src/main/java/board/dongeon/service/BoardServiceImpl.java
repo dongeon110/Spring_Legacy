@@ -75,6 +75,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public boolean restore(int pno) { // 게시물 복구
+        log.info("restore pno: " + pno);
+        return postDao.restorePost(pno) == 1;
+    }
+
+    @Override
     public void addRepost(PostVO postVO) { // 답글 추가
         log.info("BoardServiceImpl addRepost postVO: " + postVO);
         postDao.insertRepost(postVO);
