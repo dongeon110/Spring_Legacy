@@ -64,8 +64,9 @@
 						</div>
 
 						<sec:authentication property="principal" var="pinfo" />
+						<sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
 						<sec:authorize access="isAuthenticated()">
-							<c:if test="${pinfo.username eq postVO.posterName}">
+							<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
 								<button type="submit" data-oper='modify' class="btn btn-default">수정</button>
 								<button type="submit" data-oper='remove' class="btn btn-danger">삭제</button>
 							</c:if>

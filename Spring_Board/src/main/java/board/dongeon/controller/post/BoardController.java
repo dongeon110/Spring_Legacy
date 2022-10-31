@@ -45,9 +45,6 @@ public class BoardController {
 //            // DEPTH -1 ORDER가 있으면
 //
 //        }
-
-
-
     }
 
 
@@ -97,7 +94,7 @@ public class BoardController {
 
 
 
-//    @PreAuthorize("principal.username == #postVO.posterName")
+    @PreAuthorize("(principal.username == #posterName) OR (hasRole('ROLE_ADMIN'))")
     @PostMapping("/update")
 //    public String update(PostVO postVO, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
     public String update(PostVO postVO, SearchInfo searchInfo, RedirectAttributes rttr) {
@@ -110,7 +107,7 @@ public class BoardController {
         return "redirect:/board/list" + searchInfo.getListLink();
     }
 
-    @PreAuthorize("principal.username == #posterName") // #을 앞에 붙이면 파라미터에 접근할 수 있음
+    @PreAuthorize("(principal.username == #posterName) OR (hasRole('ROLE_ADMIN'))") // #을 앞에 붙이면 파라미터에 접근할 수 있음
     @PostMapping("/remove")
 //    public String remove(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
     public String remove(@RequestParam("postNo") int pno, SearchInfo searchInfo, RedirectAttributes rttr, String posterName) {

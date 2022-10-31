@@ -45,13 +45,15 @@
 					</div>
 
 					<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
 					<sec:authorize access="isAuthenticated()">
-						<c:if test="${pinfo.username eq postVO.posterName}">
-							<button data-oper="modify"
-									class="btn btn-default">
-								수정/삭제
-							</button>
-						</c:if>
+							<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
+								<button data-oper="modify"
+										class="btn btn-default">
+									수정/삭제
+								</button>
+							</c:if>
+
 						<c:if test="${postVO.redepth <= 2 and postVO.redepth >=0}">
 							<button data-oper="addrepost"
 									class="btn btn-default">
