@@ -26,4 +26,24 @@
         FROM member mem LEFT OUTER JOIN member_auth auth ON mem.userid = auth.userid
         WHERE mem.userid = #{userid}
     </select>
+
+    <select id="getMember" resultType="memberVO">
+        SELECT userid, userpw, username, regdate, updatedate, enabled
+        FROM member
+        WHERE userid = #{userid}
+    </select>
+
+    <insert id="memberInsert" parameterType="memberVO">
+        INSERT INTO member(userid, userpw, username, regdate, updatedate, enabled)
+        VALUES (#{userid}, #{userpw}, #{username}, NOW(), NOW(), 'T')
+    </insert>
+
+    <update id="memberUpdate" parameterType="memberVO">
+
+    </update>
+
+    <update id="memberDelete">
+        UPDATE member SET enabled='F' WHERE userid=#{userid}
+    </update>
+
 </mapper>

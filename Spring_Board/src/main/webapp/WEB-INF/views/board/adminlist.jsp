@@ -60,13 +60,13 @@
 								<tr>
 									<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
 									<td>
-										[삭제된 게시물]
 										<c:forEach var="i" begin="0" end="${postVO.redepth}">
 											&nbsp&nbsp&nbsp
 										</c:forEach>
 										<c:if test="${postVO.redepth != 0}" var="re">
 											<span class="badge badge-primary">[Re]</span>
 										</c:if>
+										[삭제된 게시물]
 										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
 												${postVO.postSubject}
 										</a>

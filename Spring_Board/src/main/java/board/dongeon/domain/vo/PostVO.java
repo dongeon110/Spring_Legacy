@@ -21,6 +21,7 @@ public class PostVO {
     private int regroup;
     private int redepth;
     private int reorder;
+    private int reparent;
     private boolean enabled;
 
     private int cntReply;

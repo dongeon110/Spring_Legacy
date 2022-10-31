@@ -154,9 +154,13 @@ public class BoardController {
 
     @PostMapping("/addrepost")
     @PreAuthorize("isAuthenticated()")
-    public String addrepost(PostVO postVO, RedirectAttributes rttr) {
+    public String addrepost(PostVO postVO, int originpost, RedirectAttributes rttr, Model model) {
         log.info("==========================");
         log.info("add repost: " + postVO);
+
+//        String originpostNoStr = (String)model.getAttribute("originpost");
+//        int originpostNo = Integer.parseInt(originpostNoStr);
+        postVO.setReparent(originpost);
 
         // 파일 업로드
 //        if (postVO.getAttachList() != null) {

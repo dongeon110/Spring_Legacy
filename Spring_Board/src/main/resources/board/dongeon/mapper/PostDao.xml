@@ -19,6 +19,7 @@
         <result column="REORDER" property="reorder"/>
         <result column="ENABLED" property="enabled"/>
         <result column="CNTREPLY" property="cntReply"/>
+        <result column="REPARENT" property="reparent"/>
     </resultMap>
 
     <sql id="searchinfo">
@@ -39,6 +40,33 @@
         </trim>
     </sql>
 
+    <sql id="isdeleted">
+        SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED FROM board WHERE pno IN
+            (
+              WITH RECURSIVE search_bom(pno, regroup, LEVEL, reorder, reparent, enabled, path, cycle) AS (
+                  SELECT aa.pno, aa.regroup, 0, aa.reorder, aa.reparent, aa.enabled, ARRAY[aa.pno], false
+                  FROM board aa
+                  WHERE aa.reparent IS NULL
+                  UNION ALL
+                  SELECT aa.pno, aa.regroup, LEVEL +1, aa.reorder, aa.reparent, aa.enabled, path||aa.pno, aa.pno = ANY(path)
+                  FROM board aa, search_bom sb
+                  WHERE aa.reparent = sb.pno AND NOT CYCLE
+              ),
+                 sub1(pno) AS ( -- All
+                     SELECT pno, reparent, regroup, LEVEL, reorder, enabled, path, path[1:LEVEL] AS path2
+                     FROM search_bom
+                 ),
+                 sub2(pno) AS ( -- enabled True
+                     SELECT pno, reparent, regroup, LEVEL, reorder, enabled, path, path[1:LEVEL] AS path2
+                     FROM search_bom
+                     WHERE enabled='T'
+                 )
+              SELECT distinct sub1.pno
+              FROM sub1
+                       LEFT JOIN sub2 ON sub1.pno = ANY(sub2.path2)
+              WHERE sub1.enabled='F' AND sub2.path2 IS NOT NULL)
+    </sql>
+
 
     <select id="searchList" parameterType="map" resultMap="postVOResultMap">
         SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
@@ -54,6 +82,8 @@
                             WHERE
                                 <include refid="searchinfo"></include>
                                 ENABLED='T'
+                            UNION ALL
+                            <include refid="isdeleted"></include>
                             ORDER BY regroup DESC, reorder ASC
                         ) AS SEARCHBOARD
                 ) AS ORDERBOARD
@@ -66,6 +96,34 @@
             ]]>
             ORDER BY regroup DESC, reorder ASC) AS REORDERBOARD
     </select>
+
+<!--    <select id="searchList" parameterType="map" resultMap="postVOResultMap">-->
+<!--        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY-->
+<!--        FROM-->
+<!--        (SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY-->
+<!--        FROM-->
+<!--        ( &#45;&#45; Paging 처리하기 위한 ROWNUM 추가-->
+<!--        SELECT (ROW_NUMBER() OVER()) AS rn, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED-->
+<!--        FROM-->
+<!--        (   &#45;&#45; 검색어 조건 조회 서브쿼리-->
+<!--        SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED-->
+<!--        FROM BOARD-->
+<!--        WHERE-->
+<!--        <include refid="searchinfo"></include>-->
+<!--        ENABLED='T'-->
+<!--        ORDER BY regroup DESC, reorder ASC-->
+<!--        ) AS SEARCHBOARD-->
+<!--        ) AS ORDERBOARD-->
+<!--        LEFT JOIN-->
+<!--        (SELECT PNO AS PNO2, COUNT(*) AS CNTREPLY FROM REPLY GROUP BY PNO2) AS JOINBOARD-->
+<!--        ON PNO = PNO2-->
+<!--        &#45;&#45; Paging-->
+<!--        <![CDATA[-->
+<!--            WHERE rn > (#{pageNum}-1)*#{amount} AND rn <= #{pageNum}*#{amount}-->
+<!--            ]]>-->
+<!--        ORDER BY regroup DESC, reorder ASC) AS REORDERBOARD-->
+<!--    </select>-->
+
 
     <select id="adminSearchList" parameterType="map" resultMap="postVOResultMap">
 
@@ -139,10 +197,10 @@
     <insert id="insertRepost" parameterType="postVO">
         BEGIN;
             UPDATE board SET REORDER = REORDER+1 WHERE REGROUP=#{regroup} AND REORDER >= #{reorder};
-            INSERT INTO BOARD(PSUBJECT, PTEXT, POSTERNAME, CRE_DATE, MOD_DATE, REGROUP, REDEPTH, REORDER)
+            INSERT INTO BOARD(PSUBJECT, PTEXT, POSTERNAME, CRE_DATE, MOD_DATE, REGROUP, REDEPTH, REORDER, REPARENT)
             VALUES
                 (#{postSubject}, #{postText}, #{posterName},
-                 NOW(), NOW(), #{regroup}, #{redepth}, #{reorder});
+                 NOW(), NOW(), #{regroup}, #{redepth}, #{reorder}, #{reparent});
         END;
     </insert>
 

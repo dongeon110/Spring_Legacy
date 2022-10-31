@@ -30,29 +30,47 @@
 					</thead>
 				
 					<c:forEach var="postVO" items="${postVOs}">
-						<tr>
-							<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
-							<td>
-								<c:forEach var="i" begin="0" end="${postVO.redepth}">
-									&nbsp&nbsp&nbsp
-								</c:forEach>
-								<c:if test="${postVO.redepth != 0}" var="re">
-									<span class="badge badge-primary">[Re]</span>
-								</c:if>
-								<a class="move" href='<c:out value="${postVO.postNo}"/>'>
-									${postVO.postSubject}
-								</a>
-								<c:if test="${postVO.cntReply > 0}">
-									<span style="color:red;">&nbsp[${postVO.cntReply}]</span>
-								</c:if>
-							</td>
-							<td>${postVO.postViews}</td>
-							<td>
-								${postVO.posterName}
-							</td>
+						<c:choose>
+							<c:when test="${postVO.enabled}">
+								<tr>
+									<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
+									<td>
+										<c:forEach var="i" begin="0" end="${postVO.redepth}">
+											&nbsp&nbsp&nbsp
+										</c:forEach>
+										<c:if test="${postVO.redepth != 0}" var="re">
+											<span class="badge badge-primary">[Re]</span>
+										</c:if>
+										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
+											${postVO.postSubject}
+										</a>
+										<c:if test="${postVO.cntReply > 0}">
+											<span style="color:red;">&nbsp[${postVO.cntReply}]</span>
+										</c:if>
+									</td>
+									<td>${postVO.postViews}</td>
+									<td>
+										${postVO.posterName}
+									</td>
 
-							<td><fmt:formatDate pattern="yyyy-MM-dd aa hh:mm" value="${postVO.postCreatedDate}"/></td>
-						</tr>
+									<td><fmt:formatDate pattern="yyyy-MM-dd aa hh:mm" value="${postVO.postCreatedDate}"/></td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+								<tr>
+									<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
+									<td colspan="4">
+										<c:forEach var="i" begin="0" end="${postVO.redepth}">
+											&nbsp&nbsp&nbsp
+										</c:forEach>
+										<c:if test="${postVO.redepth != 0}" var="re">
+											<span class="badge badge-primary">[Re]</span>
+										</c:if>
+										삭제된 게시물 입니다.
+									</td>
+								</tr>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</table>
 				<div class="row">
