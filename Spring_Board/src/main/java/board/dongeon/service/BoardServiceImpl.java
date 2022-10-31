@@ -26,6 +26,11 @@ public class BoardServiceImpl implements BoardService {
         return postDao.searchList(searchInfo);
     }
 
+    public List<PostVO> adminGetList(SearchInfo searchInfo) { // 관리자페이지 게시물리스트
+        log.info("adminGetList with searchInfo: " + searchInfo);
+        return postDao.adminSearchList(searchInfo);
+    }
+
     @Override
     public PostVO get(int pno) { // 게시물 보기
         log.info("BoardServiceImpl get pno: " + pno);
@@ -43,6 +48,12 @@ public class BoardServiceImpl implements BoardService {
     public int getTotal(SearchInfo searchInfo) { // 게시물 총 개수
         log.info("BoardServiceImpl getTotal count");
         return postDao.getTotalCount(searchInfo);
+    }
+
+    @Override
+    public int adminGetTotal(SearchInfo searchInfo) {
+        log.info("Admin getTotal count");
+        return postDao.adminGetTotalCount(searchInfo);
     }
 
     @Override

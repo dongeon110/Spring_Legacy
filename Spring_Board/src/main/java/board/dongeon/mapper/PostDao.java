@@ -10,6 +10,8 @@ public interface PostDao {
 //    public List<PostVO> searchList();
     public List<PostVO> searchList(SearchInfo searchInfo);
 
+    public List<PostVO> adminSearchList(SearchInfo searchInfo);
+
     // 게시글 등록
     public int insert(PostVO postVO);
 //    public int insertbyUser(PostVO postVO);
@@ -37,4 +39,5 @@ public interface PostDao {
     // 게시글 총 개수
     public int getTotalCount(SearchInfo searchInfo);
 
+    public int adminGetTotalCount(SearchInfo searchInfo);
 }

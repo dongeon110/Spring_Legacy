@@ -47,6 +47,20 @@ public class BoardController {
 //        }
     }
 
+    @GetMapping("/adminlist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void adminlist(SearchInfo searchInfo, Model model) { // 관리자 페이지
+        log.info("searchInfo: " + searchInfo);
+        List<PostVO> postVOs = service.adminGetList(searchInfo);
+
+        model.addAttribute("postVOs", postVOs);
+
+        int total = service.adminGetTotal(searchInfo);
+        log.info("total: " + total);
+        model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
+    }
+
+
 
     @GetMapping("/add")
     @PreAuthorize("isAuthenticated()")

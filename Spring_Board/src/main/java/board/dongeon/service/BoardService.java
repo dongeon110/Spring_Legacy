@@ -9,11 +9,15 @@ public interface BoardService {
 
     public List<PostVO> getList(SearchInfo searchInfo); // 게시물 리스트
 
+    public List<PostVO> adminGetList(SearchInfo searchInfo); // 관리자페이지 게시물리스트
+    
     public PostVO get(int pno); // 게시물 보기
     
     public void increaseViews(int pno); // 게시물 조회수 증가
 
     public int getTotal(SearchInfo searchInfo); // 게시물 총 개수
+    
+    public int adminGetTotal(SearchInfo searchInfo); // 관리자페이지 게시물 총 개수
     
     public void add(PostVO postVO); // 게시물 추가
     

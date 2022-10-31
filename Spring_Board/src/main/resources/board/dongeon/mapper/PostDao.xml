@@ -71,6 +71,38 @@
             ORDER BY regroup DESC, reorder ASC) AS REORDERBOARD
     </select>
 
+    <select id="adminSearchList" parameterType="map" resultMap="postVOResultMap">
+
+        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
+        FROM
+            (SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
+            FROM
+                ( -- Paging 처리하기 위한 ROWNUM 추가
+                SELECT (ROW_NUMBER() OVER()) AS rn, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED
+                FROM
+                    (   -- 검색어 조건 조회 서브쿼리
+                    SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED
+                    FROM BOARD
+                    WHERE
+                        <include refid="searchinfo"></include>
+        <![CDATA[
+                        PNO > 0
+                    ORDER BY regroup DESC, reorder ASC
+                    ) AS SEARCHBOARD
+                ) AS ORDERBOARD
+                LEFT JOIN
+                    (SELECT PNO AS PNO2, COUNT(*) AS CNTREPLY FROM REPLY GROUP BY PNO2) AS JOINBOARD
+                ON PNO = PNO2
+            -- Paging
+            WHERE rn > (#{pageNum}-1)*#{amount} AND rn <= #{pageNum}*#{amount}
+        ORDER BY regroup DESC, reorder ASC) AS REORDERBOARD
+        ]]>
+    </select>
+
+
+
+
+
     <insert id="insert" parameterType="postVO">
         INSERT INTO board(PSUBJECT, PTEXT, POSTERNAME, CRE_DATE, MOD_DATE)
         VALUES (#{postSubject}, #{postText}, #{posterName}, NOW(), NOW())
@@ -124,6 +156,16 @@
         WHERE
             <include refid="searchinfo"></include>
             ENABLED = 'T'
+    </select>
+
+    <select id="adminGetTotalCount" resultType="int">
+
+        SELECT count(*) FROM board
+        WHERE
+            <include refid="searchinfo"></include>
+        <![CDATA[
+            PNO > 0
+        ]]>
     </select>
 
     <select id="superisdeleted" parameterType="int" resultMap="postVOResultMap">
