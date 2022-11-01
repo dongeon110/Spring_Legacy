@@ -253,16 +253,19 @@
           <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-user">
-          <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-          </li>
+          <sec:authorize access="isAuthenticated()">
+            <sec:authentication property="principal" var="pinfo"/>
+            <li><a href="#"><i class="fa fa-user fa-fw"></i> ${pinfo.username} 님</a>
+            </li>
+          </sec:authorize>
           <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
           </li>
           <li class="divider"></li>
           <sec:authorize access="isAuthenticated()">
-            <li><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            <li><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
           </sec:authorize>
           <sec:authorize access="isAnonymous()">
-            <li><a href="/customLogin"><i class="fa fa-sign-out fa-fw"></i>Login</a></li>
+            <li><a href="/customLogin"><i class="fa fa-sign-out fa-fw"></i>로그인</a></li>
           </sec:authorize>
         </ul>
         <!-- /.dropdown-user -->
@@ -286,6 +289,14 @@
             <!-- /input-group -->
           </li>
           <li>
+            <a href="/board/list"><i class="fa fa-table fa-fw"></i> 게시판</a>
+          </li>
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <li>
+            <a href="/board/adminlist"><i class="fa fa-table fa-fw"></i> 게시판 관리</a>
+            </li>
+          </sec:authorize>
+          <li>
             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
           </li>
           <li>
@@ -299,9 +310,6 @@
               </li>
             </ul>
             <!-- /.nav-second-level -->
-          </li>
-          <li>
-            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
           </li>
           <li>
             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>

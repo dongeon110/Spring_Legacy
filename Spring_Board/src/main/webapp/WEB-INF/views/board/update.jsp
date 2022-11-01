@@ -6,7 +6,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Post Update</h1>
+		<h1 class="page-header">게시물 수정/삭제</h1>
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -16,7 +16,7 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 
-			<div class="panel-heading">Post Update</div>
+			<div class="panel-heading">게시물 수정/삭제</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 
@@ -66,8 +66,10 @@
 						<sec:authentication property="principal" var="pinfo" />
 						<sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
 						<sec:authorize access="isAuthenticated()">
-							<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
+							<c:if test="${(pinfo.username eq postVO.posterName)}">
 								<button type="submit" data-oper='modify' class="btn btn-default">수정</button>
+							</c:if>
+							<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
 								<button type="submit" data-oper='remove' class="btn btn-danger">삭제</button>
 							</c:if>
 						</sec:authorize>

@@ -7,12 +7,12 @@ import java.util.List;
 
 @Data
 public class MemberVO {
-    private String userid;
-    private String userpw;
-    private String userName;
-    private boolean enabled;
+    private String userid; // 아이디 pk
+    private String userpw; // password
+    private String userName; // 이름
+    private boolean enabled; // 삭제 flag
 
-    private Date regDate;
-    private Date updateDate;
-    private List<AuthVO> authList;
+    private Date regDate; // 생성일
+    private Date updateDate; // 최근 수정일
+    private List<AuthVO> authList; // 권한 리스트
 }

@@ -45,14 +45,14 @@
     <div class="col-md-4 col-md-offset-4">
       <div class="login-panel panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Logout Page</h3>
+          <h3 class="panel-title">로그아웃 페이지</h3>
         </div>
         <div class="panel-body">
           <form role="form" method='post' action="/customLogout">
             <fieldset>
 
               <!-- Change this to a button or input when using this as a form -->
-              <a href="index.html" class="btn btn-lg btn-success btn-block">Logout</a>
+              <a href="index.html" class="btn btn-lg btn-success btn-block">로그아웃</a>
             </fieldset>
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}" />

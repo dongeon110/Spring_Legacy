@@ -8,7 +8,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Board Read</h1>
+		<h1 class="page-header">게시글 보기</h1>
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -18,7 +18,7 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 
-			<div class="panel-heading">Board Read Page</div>
+			<div class="panel-heading">게시글 보기</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 
@@ -28,83 +28,92 @@
 												  value='<c:out value="${postVO.postNo}"/>' readonly="readonly">
 					</div>
 
-					<div class="form-group">
-						<label>제목</label> <input class="form-control" name="postSubject"
-													value='<c:out value="${postVO.postSubject}"/>' readonly="readonly">
-					</div>
-
-					<div class="form-group">
-						<label>내용</label>
-						<textarea class="form-control" rows="3" name="postText"
-								  readonly="readonly"><c:out value="${postVO.postText}"/></textarea>
-					</div>
-
-					<div class="form-group">
-						<label>작성자</label> <input class="form-control" name="posterName"
-													 value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
-					</div>
-
-					<sec:authentication property="principal" var="pinfo"/>
 					<sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
-					<sec:authorize access="isAuthenticated()">
-							<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
-								<button data-oper="modify"
+					<c:choose>
+						<c:when test="${postVO.enabled || isadmin}">
+						<div class="form-group">
+							<label>제목</label> <input class="form-control" name="postSubject"
+														value='<c:out value="${postVO.postSubject}"/>' readonly="readonly">
+						</div>
+
+						<div class="form-group">
+							<label>내용</label>
+							<textarea class="form-control" rows="3" name="postText"
+									  readonly="readonly"><c:out value="${postVO.postText}"/></textarea>
+						</div>
+
+						<div class="form-group">
+							<label>작성자</label> <input class="form-control" name="posterName"
+														 value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
+						</div>
+
+
+
+						<sec:authorize access="isAuthenticated()">
+							<sec:authentication property="principal" var="pinfo"/>
+								<c:if test="${(pinfo.username eq postVO.posterName) || isadmin}">
+									<button data-oper="modify"
+											class="btn btn-default">
+										수정/삭제
+									</button>
+								</c:if>
+
+							<c:if test="${postVO.redepth <= 2 and postVO.redepth >=0}">
+								<button data-oper="addrepost"
 										class="btn btn-default">
-									수정/삭제
+									답글달기
 								</button>
 							</c:if>
+							<c:if test="${postVO.redepth == 3}">
+								<button data-oper="addrepostblock"
+										class="btn btn-default">
+									답글달기
+								</button>
+							</c:if>
+						</sec:authorize>
+						<sec:authorize access="${isadmin}">
+							<c:if test="${!postVO.enabled}">
+								<button data-oper="restorepost"
+										class="btn btn-default">
+									복구하기
+								</button>
+							</c:if>
+						</sec:authorize>
+						<button data-oper="list"
+								class="btn btn-info">
+							<%--                  onclick="location.href='/board/list'">--%>
+							목록
+						</button>
 
-						<c:if test="${postVO.redepth <= 2 and postVO.redepth >=0}">
-							<button data-oper="addrepost"
-									class="btn btn-default">
-								답글달기
-							</button>
-						</c:if>
-						<c:if test="${postVO.redepth == 3}">
-							<button data-oper="addrepostblock"
-									class="btn btn-default">
-								답글달기
-							</button>
-						</c:if>
-					</sec:authorize>
-					<sec:authorize access="${isadmin}">
-						<c:if test="${!postVO.enabled}">
-							<button data-oper="restorepost"
-									class="btn btn-default">
-								복구하기
-							</button>
-						</c:if>
-					</sec:authorize>
-					<button data-oper="list"
-							class="btn btn-info">
-						<%--                  onclick="location.href='/board/list'">--%>
-						목록
-					</button>
+						<form id="operForm" action="/board/modify" method="get">
+							<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
+							<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+							<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+							<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+							<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
+						</form>
 
-					<form id="operForm" action="/board/modify" method="get">
-						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
-						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
-						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
-						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
-						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
-					</form>
+						<form id="operForm" action="/board/addrepost" method="get">
+							<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
+							<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+							<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+							<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+							<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
+						</form>
 
-					<form id="operForm" action="/board/addrepost" method="get">
-						<input type='hidden' id='pno' name='pno' value='<c:out value="${postVO.postNo}"/>'>
-						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
-						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
-						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
-						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
-					</form>
-
-					<form id="operFormPost" action="/board/restore" method="post">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<input type='hidden' id='pno' name='postNo' value='<c:out value="${postVO.postNo}"/>'>
-						<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
-						<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
-						<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
-						<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
-					</form>
+						<form id="operFormPost" action="/board/restore" method="post">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type='hidden' id='pno' name='postNo' value='<c:out value="${postVO.postNo}"/>'>
+							<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+							<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+							<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+							<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
+						</form>
+						</c:when>
+						<c:otherwise>
+							<h3>삭제된 게시물 입니다.</h3>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 			<!-- end panel-body -->
@@ -154,31 +163,31 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+				<h4 class="modal-title" id="myModalLabel">댓글 MODAL</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label>Reply</label>
+					<label>댓글</label>
 					<input class="form-control" name="reply" value="New Reply!!!">
 				</div>
 
 				<div class="form-group">
-					<label>Replyer</label>
+					<label>작성자</label>
 					<input class="form-control" name="replyer" value="replyer" readonly="readonly">
 				</div>
 
 				<div class="form-group">
-					<label>Reply Date</label>
+					<label>답글 날짜</label>
 					<input class="form-control" name="replyDate" value="2022-10-01 12:34">
 				</div>
 
 
 			</div>
 			<div class="modal-footer">
-				<button id="modalModBtn" type="button" class="btn btn-warning">Modify</button>
-				<button id="modalRemoveBtn" type="button" class="btn btn-danger">Remove</button>
-				<button id="modalRegisterBtn" type="button" class="btn btn-primary">Add</button>
-				<button id="modalCloseBtn" type="button" class="btn btn-default">Close</button>
+				<button id="modalModBtn" type="button" class="btn btn-warning">수정</button>
+				<button id="modalRemoveBtn" type="button" class="btn btn-danger">삭제</button>
+				<button id="modalRegisterBtn" type="button" class="btn btn-primary">추가</button>
+				<button id="modalCloseBtn" type="button" class="btn btn-default">닫기</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -269,7 +278,7 @@
 			for(var i = startNum; i <= endNum; i++) {
 				var active = pageNum == i? "active":"";
 
-				str+= "<li class='page-item "+ active + " '><a class='page-link' href='" + i + "'>이전</a></li>";
+				str+= "<li class='page-item "+ active + " '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
 			}
 
 			if(next) {

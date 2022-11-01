@@ -67,6 +67,23 @@
               WHERE sub1.enabled='F' AND sub2.path2 IS NOT NULL)
     </sql>
 
+    <sql id="isdeletedwithoutsearch">
+        <foreach item="type" collection="typeArr">
+            <choose>
+                <when test="type == 'S'.toString()"></when>
+                <when test="type == 'T'.toString()"></when>
+                <when test="type == 'P'.toString()"></when>
+                <otherwise>
+                    UNION ALL
+                    <include refid="isdeleted"></include>
+                </otherwise>
+            </choose>
+        </foreach>
+        <if test="type == null">
+            UNION ALL
+            <include refid="isdeleted"></include>
+        </if>
+    </sql>
 
     <select id="searchList" parameterType="map" resultMap="postVOResultMap">
         SELECT (ROW_NUMBER() OVER()) AS ROWNUM, PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED, CNTREPLY
@@ -82,8 +99,9 @@
                             WHERE
                                 <include refid="searchinfo"></include>
                                 ENABLED='T'
-                            UNION ALL
-                            <include refid="isdeleted"></include>
+                            <include refid="isdeletedwithoutsearch"></include>
+<!--                            UNION ALL-->
+<!--                            <include refid="isdeleted"></include>-->
                             ORDER BY regroup DESC, reorder ASC
                         ) AS SEARCHBOARD
                 ) AS ORDERBOARD
@@ -209,10 +227,12 @@
     </update>
 
     <select id="getTotalCount" resultType="int">
-        SELECT count(*) FROM board
+    SELECT count(*) FROM
+        (SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED FROM board
         WHERE
-            <include refid="searchinfo"></include>
-            ENABLED = 'T'
+        <include refid="searchinfo"></include>ENABLED = 'T'
+        UNION ALL
+        <include refid="isdeleted"></include>) AS forgettotalcount
     </select>
 
     <select id="adminGetTotalCount" resultType="int">

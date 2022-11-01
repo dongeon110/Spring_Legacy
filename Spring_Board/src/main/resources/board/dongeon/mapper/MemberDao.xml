@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board.dongeon.mapper.MemberDao">
 
-    <resultMap type="board.dongeon.domain.vo.MemberVO" id="memberMap">
+    <resultMap type="memberVO" id="memberMap">
         <id property="userid" column="userid"/>
         <result property="userid" column="userid"/>
         <result property="userpw" column="userpw"/>
@@ -34,8 +34,12 @@
     </select>
 
     <insert id="memberInsert" parameterType="memberVO">
-        INSERT INTO member(userid, userpw, username, regdate, updatedate, enabled)
-        VALUES (#{userid}, #{userpw}, #{username}, NOW(), NOW(), 'T')
+        BEGIN;
+            INSERT INTO member(userid, userpw, username)
+            VALUES (#{userid}, #{userpw}, #{userName});
+            INSERT INTO member_auth(userid, auth)
+            VALUES (#{userid}, 'ROLE_USER');
+        END;
     </insert>
 
     <update id="memberUpdate" parameterType="memberVO">

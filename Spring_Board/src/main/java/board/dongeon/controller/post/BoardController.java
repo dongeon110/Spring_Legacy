@@ -89,11 +89,13 @@ public class BoardController {
     public void view(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo,
                      Model model, @CookieValue(value="viewcookie", defaultValue = "0", required = true) String cookievalue) {
         log.info("/view");
-        model.addAttribute("postVO", service.get(pno));
+        PostVO viewPost = service.get(pno);
+        model.addAttribute("postVO", viewPost);
         log.info("postVO" + service.get(pno));
 
 //        /* 조회수 */
-        service.increaseViews(pno);
+        if (viewPost.isEnabled()) {service.increaseViews(pno);}
+
 //        String pnoValue = "[" + pno + "]";
 //        boolean isView = cookievalue.contains(pnoValue);
 //        if(!isView) {
