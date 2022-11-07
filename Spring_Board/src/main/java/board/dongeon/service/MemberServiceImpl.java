@@ -36,4 +36,9 @@ public class MemberServiceImpl implements MemberService {
     public void memberDelete(MemberVO memberVO) { // 회원탈퇴
         
     }
+
+    public boolean isDuplicated(String userid) { // 회원 ID 중복 확인
+        log.info("isDuplicated id: " + userid);
+        return memberDao.isDuplicated(userid) == 1;
+    }
 }

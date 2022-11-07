@@ -12,4 +12,6 @@ public interface MemberDao {
     public void memberUpdate(MemberVO memberVO); // 회원정보 수정
 
     public void memberDelete(String userid); // 회원탈퇴
+
+    public int isDuplicated(String userid); // 회원 중복 확인
 }

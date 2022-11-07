@@ -50,4 +50,8 @@
         UPDATE member SET enabled='F' WHERE userid=#{userid}
     </update>
 
+    <select id="isDuplicated" resultType="int">
+        SELECT count(*) FROM member WHERE userid=#{userid}
+    </select>
+
 </mapper>

@@ -11,4 +11,6 @@ public interface MemberService {
     public void memberUpdate(MemberVO memberVO); // 회원 정보 수정
 
     public void memberDelete(MemberVO memberVO); // 회원 탈퇴
+    
+    public boolean isDuplicated(String userid); // 회원 id 중복확인
 }

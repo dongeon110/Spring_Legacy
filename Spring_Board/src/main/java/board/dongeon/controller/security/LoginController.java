@@ -66,11 +66,21 @@ public class LoginController {
         log.info("/auth/signup post...");
         log.info("signup: " + memberVO);
 
+        if(service.isDuplicated(memberVO.getUserid())) { // 중복값 있으면
+            return "redirect:/auth/isduplicated";
+        }
+
         memberVO.setUserpw(pwencoder.encode(memberVO.getUserpw()));
         log.info("pwencoder memberVO: " + memberVO);
         service.memberCreate(memberVO);
         rttr.addFlashAttribute("result", "success");
         return "redirect:/board/list";
+    }
+
+    @GetMapping("/isduplicated")
+    @PreAuthorize("isAnonymous()")
+    public void isduplicated() {
+
     }
 
 
