@@ -175,4 +175,16 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
+
+    @GetMapping("/errortest")
+    public String test(Model model) {
+        int i = 1/0; // 0으로 나눠서 500 에러
+        model.addAttribute("i", i);
+        return "home";
+    }
+
+    @PostMapping("/errortest2") // GET요청시 405 에러
+    public String test2(Model model) {
+        return "home";
+    }
 }
