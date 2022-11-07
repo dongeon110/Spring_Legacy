@@ -1,4 +1,4 @@
-package board.dongeon.controller.post;
+package board.dongeon.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

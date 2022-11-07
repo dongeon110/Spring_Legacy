@@ -110,7 +110,7 @@ public class BoardController {
 
 
 
-    @PreAuthorize("(principal.username == #posterName) OR (hasRole('ROLE_ADMIN'))")
+    @PreAuthorize("(principal.username == #postVO.posterName) OR (hasRole('ROLE_ADMIN'))")
     @PostMapping("/update")
 //    public String update(PostVO postVO, @ModelAttribute("searchInfo") SearchInfo searchInfo, RedirectAttributes rttr) {
     public String update(PostVO postVO, SearchInfo searchInfo, RedirectAttributes rttr) {
