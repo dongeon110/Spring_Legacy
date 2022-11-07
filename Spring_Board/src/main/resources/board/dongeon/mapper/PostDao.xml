@@ -99,9 +99,8 @@
                             WHERE
                                 <include refid="searchinfo"></include>
                                 ENABLED='T'
-                            <include refid="isdeletedwithoutsearch"></include>
-<!--                            UNION ALL-->
-<!--                            <include refid="isdeleted"></include>-->
+                                <include refid="isdeletedwithoutsearch"></include>
+
                             ORDER BY regroup DESC, reorder ASC
                         ) AS SEARCHBOARD
                 ) AS ORDERBOARD
@@ -230,9 +229,10 @@
     SELECT count(*) FROM
         (SELECT PNO, PSUBJECT, POSTERNAME, CRE_DATE, PVIEWS, REGROUP, REDEPTH, REORDER, ENABLED FROM board
         WHERE
-        <include refid="searchinfo"></include>ENABLED = 'T'
-        UNION ALL
-        <include refid="isdeleted"></include>) AS forgettotalcount
+        <include refid="searchinfo"></include>
+        ENABLED = 'T'
+        <include refid="isdeletedwithoutsearch"></include>) AS totalcount
+
     </select>
 
     <select id="adminGetTotalCount" resultType="int">
