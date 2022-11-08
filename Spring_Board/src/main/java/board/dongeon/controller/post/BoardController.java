@@ -12,7 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -85,7 +88,9 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @GetMapping({"/view", "/update"})
+
+
+    @GetMapping("/view")
     public void view(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo,
                      Model model, @CookieValue(value="viewcookie", defaultValue = "0", required = true) String cookievalue) {
         log.info("/view");
@@ -94,7 +99,15 @@ public class BoardController {
         log.info("postVO" + service.get(pno));
 
 //        /* 조회수 */
-        if (viewPost.isEnabled()) {service.increaseViews(pno);}
+
+        log.info("viewcookie: " + cookievalue);
+
+        if (!cookievalue.contains("[" + pno + "]")) { // 쿠키에 pno 있으면
+            if (viewPost.isEnabled()) { // 삭제된 글이 아니라면
+                service.increaseViews(pno); // 조회수 증가
+            }
+        }
+
 
 //        String pnoValue = "[" + pno + "]";
 //        boolean isView = cookievalue.contains(pnoValue);
@@ -106,6 +119,15 @@ public class BoardController {
 //        }
 
 //        /* 조회수 end */
+    }
+
+
+    @GetMapping("/update")
+    public void update(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo,
+                        Model model) {
+        log.info("/update");
+        model.addAttribute("postVO", service.get(pno));
+        log.info("update postVO: " + service.get(pno));
     }
 
 
