@@ -23,7 +23,9 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
-				/WEB-INF/spring/appServlet/interceptor-servlet.xml</param-value>
+				/WEB-INF/spring/appServlet/interceptor-servlet.xml
+				/WEB-INF/spring/appServlet/aop-context.xml
+			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>throwExceptionIfNoHandlerFound</param-name>

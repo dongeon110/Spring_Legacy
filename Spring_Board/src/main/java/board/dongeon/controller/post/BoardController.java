@@ -102,8 +102,8 @@ public class BoardController {
 
         log.info("viewcookie: " + cookievalue);
 
-        if (!cookievalue.contains("[" + pno + "]")) { // 쿠키에 pno 있으면
-            if (viewPost.isEnabled()) { // 삭제된 글이 아니라면
+        if (!cookievalue.contains("[" + pno + "]")) { // 쿠키에 pno 없으면
+            if (viewPost.isEnabled()) { // Enabled True면 (삭제 플래그 True)
                 service.increaseViews(pno); // 조회수 증가
             }
         }
