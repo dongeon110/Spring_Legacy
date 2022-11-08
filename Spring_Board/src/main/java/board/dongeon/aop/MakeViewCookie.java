@@ -1,13 +1,9 @@
 package board.dongeon.aop;
 
-import board.dongeon.domain.vo.PostVO;
 import lombok.extern.log4j.Log4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,23 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 @Aspect
 @Log4j
 @Component
-public class LogAdvice {
+public class MakeViewCookie {
 
 //    @Before("execution(* board.dongeon.controller.post.BoardController.view(..))")
-//    public void logBefore(JoinPoint joinPoint) {
-//        log.info("=======logBefore=========");
+//    public void viewBefore(JoinPoint joinPoint) {
+//        log.info("=======viewBefore=========");
 //        System.out.println("=======logBefore Start=========");
 //        Object[] signatureArgs = joinPoint.getArgs();
 //        for (Object signatureArg: signatureArgs) {
 //            System.out.println("Arg: " + signatureArg);
 //        }
-//        System.out.println("=======logBefore End=========");
+//        System.out.println("=======viewBefore End=========");
 //    }
 
     @After("execution(* board.dongeon.controller.post.BoardController.view(..))")
-    public void logAfter(JoinPoint joinPoint) {
-        log.info("=======logAfter=========");
-        System.out.println("======logAfter Start======");
+    public void viewAfter(JoinPoint joinPoint) {
+        log.info("=======viewAfter=========");
+        System.out.println("======viewAfter Start======");
         Object[] signatureArgs = joinPoint.getArgs();
         for (Object signatureArg: signatureArgs) {
             System.out.println("Arg: " + signatureArg);
@@ -68,16 +64,16 @@ public class LogAdvice {
 
         response.addCookie(cookie);
 
-        System.out.println("======logAfter End======");
+        System.out.println("======viewAfter End======");
     }
 
 //    @Around("execution(* board.dongeon.controller.post.BoardController.view(..))")
-//    public Object logAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+//    public Object viewAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 //        HttpServletRequest request =
 //                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 //                        .getRequest();
 //        String pno = (String)request.getAttribute("pno");
-//        System.out.println("==========logAround==========" + pno);
+//        System.out.println("==========viewAround==========" + pno);
 //        return proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
 //    }
 }
