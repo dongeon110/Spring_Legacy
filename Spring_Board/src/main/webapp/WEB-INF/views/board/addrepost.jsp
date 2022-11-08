@@ -90,12 +90,18 @@
 
 	$(document).ready(function(e){
 
-
-
-
 		var formObj = $("form[role='form']");
 
 		$("button[type='submit']").on("click", function(e){
+
+			if($('input[name="postSubject"]').val().trim() == '') {
+				alert("제목을 입력하세요.");
+				return false;
+			}
+			if($('textarea[name="postText"]').val().trim() == '') {
+				alert("내용을 입력하세요.");
+				return false;
+			}
 
 			e.preventDefault();
 

@@ -26,23 +26,23 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 					<div class="form-group">
-						<label>Title</label> <input class="form-control"
+						<label>제목</label> <input class="form-control"
 													name="postSubject">
 					</div>
 
 					<div class="form-group">
-						<label>Text area</label>
+						<label>내용</label>
 						<textarea class="form-control" rows="3" name="postText"></textarea>
 					</div>
 
 					<div class="form-group">
-						<label>Writer</label> <input class="form-control"
+						<label>작성자</label> <input class="form-control"
 													 name="posterName"
 													 value='<sec:authentication property="principal.username"/>'
 													 readonly="readonly">
 					</div>
 
-					<button type="submit" class="btn btn-default">추가하기</button>
+					<button type="submit" class="btn btn-default" >추가하기</button>
 					<button type="reset" class="btn btn-default">다시 작성</button>
 				</form>
 
@@ -56,16 +56,23 @@
 </div>
 <!-- /.row -->
 
+
 <script>
 
 	$(document).ready(function(e){
-
-
-
-
 		var formObj = $("form[role='form']");
 
 		$("button[type='submit']").on("click", function(e){
+
+			if($('input[name="postSubject"]').val().trim() == '') {
+				alert("제목을 입력하세요.");
+				return false;
+			}
+			if($('textarea[name="postText"]').val().trim() == '') {
+				alert("내용을 입력하세요.");
+				return false;
+			}
+
 
 			e.preventDefault();
 

@@ -88,6 +88,16 @@
 		var formObj = $("form");
 
 		$('button').on("click", function(e){
+
+			if($('input[name="postSubject"]').val().trim() == '') {
+				alert("제목을 입력하세요.");
+				return false;
+			}
+			if($('textarea[name="postText"]').val().trim() == '') {
+				alert("내용을 입력하세요.");
+				return false;
+			}
+
 			e.preventDefault();
 
 			var operation = $(this).data("oper");
