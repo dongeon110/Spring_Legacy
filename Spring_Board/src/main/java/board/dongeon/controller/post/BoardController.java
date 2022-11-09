@@ -77,11 +77,6 @@ public class BoardController {
         log.info("==========================");
         log.info("add: " + postVO);
 
-        // 파일 업로드
-//        if (postVO.getAttachList() != null) {
-//            postVO.getAttachList().forEach(attach -> log.info(attach));
-//        }
-
         log.info("==========================");
         service.add(postVO);
         rttr.addFlashAttribute("result", postVO.getPostNo());
@@ -98,8 +93,7 @@ public class BoardController {
         model.addAttribute("postVO", viewPost);
         log.info("postVO" + service.get(pno));
 
-//        /* 조회수 */
-
+        /* 조회수 */
         log.info("viewcookie: " + cookievalue);
 
         if (!cookievalue.contains("[" + pno + "]")) { // 쿠키에 pno 없으면
@@ -107,18 +101,7 @@ public class BoardController {
                 service.increaseViews(pno); // 조회수 증가
             }
         }
-
-
-//        String pnoValue = "[" + pno + "]";
-//        boolean isView = cookievalue.contains(pnoValue);
-//        if(!isView) {
-//            cookievalue += pnoValue;
-//            Cookie cookie = new Cookie("viewcookie", cookievalue);
-//            cookie.setMaxAge(60); // second
-//            response.addCookie(cookie);
-//        }
-
-//        /* 조회수 end */
+        /* 조회수 end */
     }
 
 
