@@ -35,7 +35,10 @@
 							<label>제목</label> <input class="form-control" name="postSubject"
 														value='<c:out value="${postVO.postSubject}"/>' readonly="readonly">
 						</div>
-
+						<div class="form-group">
+							<label>조회수</label> <input class="form-control" name="postViews"
+													  	value='<c:out value="${postVO.postViews}"/>' readonly="readonly">
+						</div>
 						<div class="form-group">
 							<label>내용</label>
 							<textarea class="form-control" rows="3" name="postText"
@@ -44,7 +47,7 @@
 
 						<div class="form-group">
 							<label>작성자</label> <input class="form-control" name="posterName"
-														 value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
+														value='<c:out value="${postVO.posterName}"/>' readonly="readonly">
 						</div>
 
 

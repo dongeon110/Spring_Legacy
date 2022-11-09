@@ -36,7 +36,7 @@ public class MakeViewCookie {
         for (Object signatureArg: signatureArgs) {
             System.out.println("Arg: " + signatureArg);
         }
-        String pno = "[" + signatureArgs[0].toString() + "]";
+        String pno = "[" + signatureArgs[0].toString() + "]"; // signatureArgs 0: pno, 1: postVO ..
         System.out.println("==========>>>>" + pno);
 
 
