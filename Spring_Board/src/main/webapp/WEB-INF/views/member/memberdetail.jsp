@@ -23,43 +23,57 @@
       <div class="panel-body">
 
         <div class="panel-body">
-          <sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
-          <div class="form-group">
-            <label>ID</label> <input class="form-control" name="userid"
-                                     value='<c:out value="${memberVO.userid}"/>' readonly="readonly">
-          </div>
-          <div class="form-group">
-            <label>이름</label> <input class="form-control" name="userName"
-                                      value='<c:out value="${memberVO.userName}"/>' readonly="readonly">
-          </div>
-          <div class="form-group">
-            <label>권한</label>
-            <input type="checkbox" name="auth" value="ROLE_ADMIN">관리자
-            <input type="checkbox" name="auth" value="ROLE_MEMBER">일반사용자
-          </div>
+          <form id="operFormAuth" method="post">
 
-          <sec:authorize access="isAuthenticated()">
-            <sec:authentication property="principal" var="pinfo"/>
-            <c:if test="${isadmin}">
-              <button data-oper="modify"
-                      class="btn btn-default">
-                수정/삭제
-              </button>
-            </c:if>
+            <input type='hidden' id='pno' name='pno' value='<c:out value="${memberVO.userid}"/>'>
+            <input type='hidden' name='originauth' value='<c:out value="${memberAuth}"/>'>
+            <input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+            <input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+            <input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+            <input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
 
-          </sec:authorize>
-          <sec:authorize access="${isadmin}">
-            <c:if test="${!memberVO.enabled}">
-              <button data-oper="restorepost"
-                      class="btn btn-default">
-                복구하기
-              </button>
-            </c:if>
-          </sec:authorize>
-          <button data-oper="memberlist"
-                  class="btn btn-info">
-            목록
-          </button>
+            <sec:authorize access="hasRole('ROLE_ADMIN')" var="isadmin"/>
+            <div class="form-group">
+
+              <label>ID</label> <input class="form-control" name="userid"
+                                       value='<c:out value="${memberVO.userid}"/>' readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>사용자 이름</label> <input class="form-control" name="userName"
+                                        value='<c:out value="${memberVO.userName}"/>' readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>권한</label><br>
+              <input type="checkbox" name="auth" value="ROLE_ADMIN" > 관리자 권한
+              <input type="checkbox" name="auth" value="ROLE_USER" > 일반사용자 권한
+            </div>
+
+            <sec:authorize access="isAuthenticated()">
+              <sec:authentication property="principal" var="pinfo"/>
+              <c:if test="${isadmin}">
+                <button data-oper="modify"
+                        class="btn btn-default">
+                  수정
+                </button>
+              </c:if>
+
+            </sec:authorize>
+            <sec:authorize access="${isadmin}">
+              <c:if test="${!memberVO.enabled}">
+                <button data-oper="restorepost"
+                        class="btn btn-default">
+                  복구하기
+                </button>
+              </c:if>
+            </sec:authorize>
+            <button data-oper="memberlist"
+                    class="btn btn-info">
+              목록
+            </button>
+
+
+
+          </form>
 
           <form id="operFormPost" action="/board/restore" method="post">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -86,8 +100,18 @@
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 
+<script type="text/javascript">
+
+  var memberAuth = '${memberAuth}';
+  $('input:checkbox[name="auth"]').each(function() {
+    if(memberAuth.includes(this.value)) {
+      this.checked=true;
+    }
+  });
+</script>
 
 <script type="text/javascript">
+
   $(document).ready(function() {
 
     var operForm = $("#operForm");
