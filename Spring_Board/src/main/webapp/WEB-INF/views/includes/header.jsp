@@ -293,7 +293,16 @@
           </li>
           <sec:authorize access="hasRole('ROLE_ADMIN')">
             <li>
-            <a href="/board/adminlist"><i class="fa fa-table fa-fw"></i> 게시판 관리</a>
+              <a href="#"><i class="fa fa-wrench fa-fw"></i> 관리자 페이지<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li>
+                  <a href="/board/adminlist"><i class="fa fa-table fa-fw"></i> 게시판 관리</a>
+                </li>
+                <li>
+                  <a href="/member/memberlist"><i class="fa fa-edit fa-fw"></i> 사용자 관리</a>
+                </li>
+              </ul>
+              <!-- /.nav-second-level -->
             </li>
           </sec:authorize>
           <li>

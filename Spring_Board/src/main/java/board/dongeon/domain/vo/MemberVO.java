@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class MemberVO {
+    private int rowNum;
     private String userid; // 아이디 pk
     private String userpw; // password
     private String userName; // 이름

@@ -18,7 +18,7 @@ public class ErrorController {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         logger.error("Exception 발생 : {}", ex.getMessage());
-        model.addAttribute("msg", "에러가 발생했습니다.");
+        model.addAttribute("msg", "에러 페이지");
         return "error/error";
     }
 

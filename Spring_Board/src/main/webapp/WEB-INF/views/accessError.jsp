@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<h1>접근이 거부되었습니다.</h1>
-<h2>SPRING_SECURITY_403_EXCEPTION.getMessage():</h2>
-<h2><c:out value="${SPRING_SECURITY_403_EXCEPTION.getMessage()}" /></h2>
-<h2><c:out value="${msg}" /></h2>
+<h1>접근이 거부되었습니다. Spring Security</h1>
+<h3>SPRING_SECURITY_403_EXCEPTION.getMessage():</h3>
+<h3><c:out value="${SPRING_SECURITY_403_EXCEPTION.getMessage()}" /></h3>
+<h3><c:out value="${msg}" /></h3>
 
 </body>
 </html>

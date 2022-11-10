@@ -6,6 +6,7 @@
 
     <resultMap type="memberVO" id="memberMap">
         <id property="userid" column="userid"/>
+        <result property="rowNum" column="rownum"/>
         <result property="userid" column="userid"/>
         <result property="userpw" column="userpw"/>
         <result property="userName" column="username"/>
@@ -21,16 +22,25 @@
         <result property="auth" column="auth"/>
     </resultMap>
 
+    <sql id="searchinfo">
+        <trim prefix="WHERE (" suffix=")" prefixOverrides="OR">
+            <foreach item="type" collection="typeArr">
+                <choose>
+                    <when test="type == 'I'.toString()">
+                        userid LIKE '%'||#{keyword}||'%'
+                    </when>
+                    <when test="type == 'N'.toString()">
+                        username LIKE '%'||#{keyword}||'%'
+                    </when>
+                </choose>
+            </foreach>
+        </trim>
+    </sql>
+
     <select id="read" resultMap="memberMap">
         SELECT mem.userid, userpw, username, enabled, regdate, updatedate, auth
         FROM member mem LEFT JOIN member_auth auth ON mem.userid = auth.userid
         WHERE mem.userid = #{userid}
-    </select>
-
-    <select id="getMember" resultType="memberVO">
-        SELECT userid, userpw, username, regdate, updatedate, enabled
-        FROM member
-        WHERE userid = #{userid}
     </select>
 
     <insert id="memberInsert" parameterType="memberVO">
@@ -54,4 +64,31 @@
         SELECT count(*) FROM member WHERE userid=#{userid}
     </select>
 
+    <select id="getMemberList" parameterType="map" resultMap="memberMap">
+        SELECT (ROW_NUMBER() OVER()) AS ROWNUM, userid, username, regdate, enabled
+        FROM
+        (
+            SELECT userid, username, regdate, enabled
+            FROM
+            (
+                SELECT (ROW_NUMBER() OVER()) AS rn, userid, username, regdate, enabled
+                FROM
+                (
+                    SELECT userid, username, regdate, enabled
+                    FROM member
+                    <include refid="searchinfo"></include>
+                    ORDER BY userid ASC
+                    ) AS searchtable
+                ) AS rntable
+            <![CDATA[
+            WHERE rn > (#{pageNum}-1)*#{amount} AND rn <= #{pageNum}*#{amount}
+            ]]>
+        ) AS pagetable
+
+    </select>
+
+    <select id="getTotal" resultType="int">
+        SELECT count(*) FROM member
+        <include refid="searchinfo"></include>
+    </select>
 </mapper>

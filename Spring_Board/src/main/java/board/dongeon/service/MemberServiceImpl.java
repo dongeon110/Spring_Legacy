@@ -1,5 +1,6 @@
 package board.dongeon.service;
 
+import board.dongeon.domain.SearchInfo;
 import board.dongeon.domain.vo.MemberVO;
 import board.dongeon.mapper.MemberDao;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Log4j
 @Service
@@ -17,8 +20,15 @@ public class MemberServiceImpl implements MemberService {
     private MemberDao memberDao;
 
     @Override
-    public void getMember(String userid) {
+    public List<MemberVO> getMemberList(SearchInfo searchInfo) {
+        log.info("getMemberList SearchInfo: " + searchInfo);
+        return memberDao.getMemberList(searchInfo);
+    }
 
+    @Override
+    public MemberVO getMember(String userid) {
+        log.info("getMember userid: " + userid);
+        return memberDao.read(userid);
     }
 
     @Override
@@ -40,5 +50,11 @@ public class MemberServiceImpl implements MemberService {
     public boolean isDuplicated(String userid) { // 회원 ID 중복 확인
         log.info("isDuplicated id: " + userid);
         return memberDao.isDuplicated(userid) == 1;
+    }
+
+    public int getTotal(SearchInfo searchInfo) {
+        int total = memberDao.getTotal(searchInfo);
+        log.info("getTotal member: " + total);
+        return total;
     }
 }

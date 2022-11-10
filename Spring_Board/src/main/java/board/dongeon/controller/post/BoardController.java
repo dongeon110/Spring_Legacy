@@ -31,7 +31,7 @@ public class BoardController {
     public void list(SearchInfo searchInfo, Model model) {
         
         // 삭제되지 않은 게시물들
-        log.info("postVOs: " + searchInfo);
+        log.info("list searchInfo: " + searchInfo);
         List<PostVO> postVOs = service.getList(searchInfo);
 
         model.addAttribute("postVOs", postVOs);
