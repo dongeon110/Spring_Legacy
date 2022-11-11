@@ -90,8 +90,6 @@
 
 						<form id='searchForm' action="/board/adminlist" method="get">
 							<select name="type">
-								<option value=""
-										<c:out value="${pageMaker.searchInfo.type == null? 'selected':''}"/>>--</option>
 								<option value="S"
 										<c:out value="${pageMaker.searchInfo.type == 'S'? 'selected' : ''}"/>>제목</option>
 								<option value="T"
@@ -103,7 +101,7 @@
 								   value='<c:out value="${pageMaker.searchInfo.keyword}"/>' size='50'>
 							<input type='hidden' name="pageNum" value='<c:out value="${pageMaker.searchInfo.pageNum}"/>'/>
 							<input type='hidden' name="amount" value='<c:out value="${pageMaker.searchInfo.amount}"/>'/>
-							<button type='btn btn-default'>검색</button>
+							<button type='btn btn-default'><i class="fa fa-search"></i></button>
 						</form>
 					</div>
 				</div>
@@ -215,7 +213,7 @@
 			}
 
 			if(!searchForm.find("input[name='keyword']").val()) {
-				alert("키워드를 입력하세요");
+				window.location.replace("/board/adminlist");
 				return false;
 			}
 

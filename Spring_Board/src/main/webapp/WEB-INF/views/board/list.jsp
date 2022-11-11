@@ -102,16 +102,11 @@
 								<option value="P"
 										<c:out value="${pageMaker.searchInfo.type == 'P'? 'selected' : ''}"/>>작성자</option>
 							</select>
-							<div class="input-group custom-search-form">
-								<input type='text' name='keyword' class="form-control" placeholder="검색"
-									   value='<c:out value="${pageMaker.searchInfo.keyword}"/>' size="50">
 
-								<span class="input-group-btn">
-									<button class='btn btn-default' type="button">
-										<i class="fa fa-search"></i>
-									</button>
-								</span>
-							</div>
+							<input type='text' name='keyword'
+								   value='<c:out value="${pageMaker.searchInfo.keyword}"/>' size='50'>
+							<button type='btn btn-default'><i class="fa fa-search"></i></button>
+
 						</form>
 					</div>
 				</div>
@@ -240,7 +235,7 @@
 			}
 
 			if(!searchForm.find("input[name='keyword']").val()) {
-				alert("키워드를 입력하세요");
+				window.location.replace("/board/list");
 				return false;
 			}
 
