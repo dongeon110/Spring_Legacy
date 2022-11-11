@@ -228,14 +228,12 @@
 				if(replyCnt == 0 && pageNum > 1) {
 					showList(pageNum-1);
 					return;
-				} else if (replyCnt == 0) {
-					return;
 				}
 
 				var str="";
 
 				if(list == null || list.length == 0) {
-					// replyUL.html("");
+					replyUL.html("");
 					return;
 				}
 
