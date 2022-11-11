@@ -262,7 +262,11 @@
 <%--          </li>--%>
           <li class="divider"></li>
           <sec:authorize access="isAuthenticated()">
-            <li><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
+              <form id="logoutFormPost" action="/customLogout" method="post">
+                  <input type="hidden" name="${_csrf.parameterName}"
+                         value="${_csrf.token}" />
+              </form>
+              <li><a href="javascript:void(0)" onClick="javascript:goPost()"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
           </sec:authorize>
           <sec:authorize access="isAnonymous()">
             <li><a href="/customLogin"><i class="fa fa-sign-out fa-fw"></i>로그인</a></li>
@@ -398,3 +402,20 @@
 
   <div id="page-wrapper">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+
+          $(".btn-success").on("click", function(e){
+
+              e.preventDefault();
+              $("form").submit();
+
+          });
+
+      </script>
+
+      <script>
+          function goPost(){
+              var logoutFormPost = $("#logoutFormPost");
+              logoutFormPost.submit();
+          }
+      </script>
