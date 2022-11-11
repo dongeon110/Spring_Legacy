@@ -104,6 +104,14 @@
   </script>
 </c:if>
 
+<c:if test="${param.error != null}">
+  <script>
+    $(document).ready(function(){
+      alert("아이디 또는 비밀번호를 확인하세요.");
+    });
+  </script>
+</c:if>
+
 </body>
 
 </html>
