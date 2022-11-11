@@ -38,7 +38,7 @@
 						<c:choose>
 							<c:when test="${postVO.enabled}">
 								<tr>
-									<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
+									<td>${postVO.rowNum + (searchInfo.pageNum -1) * (searchInfo.amount)}</td>
 									<td>
 										<c:forEach var="i" begin="0" end="${postVO.redepth}">
 											&nbsp&nbsp&nbsp
@@ -63,7 +63,7 @@
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td>${postVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
+									<td>${postVO.rowNum + (searchInfo.pageNum -1) * (searchInfo.amount)}</td>
 									<td colspan="4">
 										<c:forEach var="i" begin="0" end="${postVO.redepth}">
 											&nbsp&nbsp&nbsp

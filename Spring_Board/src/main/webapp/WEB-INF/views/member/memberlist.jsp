@@ -29,7 +29,7 @@
 
           <c:forEach var="memberVO" items="${memberVOList}">
             <tr>
-              <td>${memberVO.rowNum + (searchInfo.pageNum -1) * 10}</td>
+              <td>${memberVO.rowNum + (searchInfo.pageNum -1) * (searchInfo.amount)}</td>
               <td>
                 <a class="move" href='<c:out value="${memberVO.userid}"/>'>
                     ${memberVO.userid}

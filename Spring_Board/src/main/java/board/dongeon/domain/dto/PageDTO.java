@@ -18,8 +18,8 @@ public class PageDTO {
         this.searchInfo = searchInfo;
         this.total = total;
 
-        this.endPage = (int) (Math.ceil(searchInfo.getPageNum() / 10.0)) * 10;
-        this.startPage = this.endPage - 9;
+        this.endPage = (int) (Math.ceil(searchInfo.getPageNum() / (searchInfo.getAmount() * 1.0))) * searchInfo.getAmount();
+        this.startPage = this.endPage - searchInfo.getAmount() + 1;
 
         int realEnd = (int) (Math.ceil((total * 1.0) / searchInfo.getAmount()));
 
