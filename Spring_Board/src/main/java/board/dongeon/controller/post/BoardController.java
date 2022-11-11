@@ -41,13 +41,7 @@ public class BoardController {
         log.info("total: " + total);
         model.addAttribute("pageMaker", new PageDTO(searchInfo, total));
 
-//        // 원글 삭제 표시
-//        if (searchInfo.getType() == null) {
-//            // ROW NUMBER 1~10
-//            // UNION ALL -> ORDER BY
-//            // DEPTH -1 ORDER가 있으면
-//
-//        }
+
     }
 
     @GetMapping("/adminlist")

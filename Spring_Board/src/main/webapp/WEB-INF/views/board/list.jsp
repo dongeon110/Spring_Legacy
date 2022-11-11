@@ -75,11 +75,21 @@
 				</table>
 				<div class="row">
 					<div class="col-lg-12">
-
+						<%--          <li class="sidebar-search">--%>
+						<%--            <div class="input-group custom-search-form">--%>
+						<%--              <input type="text" class="form-control" placeholder="Search...">--%>
+						<%--              <span class="input-group-btn">--%>
+						<%--                                <button class="btn btn-default" type="button">--%>
+						<%--                                    <i class="fa fa-search"></i>--%>
+						<%--                                </button>--%>
+						<%--                            </span>--%>
+						<%--            </div>--%>
+						<%--            <!-- /input-group -->--%>
+						<%--          </li>--%>
 						<form id='searchForm' action="/board/list" method="get">
+							<input type='hidden' name="pageNum" value='<c:out value="${pageMaker.searchInfo.pageNum}"/>'/>
+							<input type='hidden' name="amount" value='<c:out value="${pageMaker.searchInfo.amount}"/>'/>
 							<select name="type">
-								<option value=""
-										<c:out value="${pageMaker.searchInfo.type == null? 'selected':''}"/>>--</option>
 								<option value="S"
 										<c:out value="${pageMaker.searchInfo.type == 'S'? 'selected' : ''}"/>>제목</option>
 								<option value="T"
@@ -87,14 +97,32 @@
 								<option value="P"
 										<c:out value="${pageMaker.searchInfo.type == 'P'? 'selected' : ''}"/>>작성자</option>
 							</select>
-							<input type='text' name='keyword'
-								   value='<c:out value="${pageMaker.searchInfo.keyword}"/>' size='50'>
-							<input type='hidden' name="pageNum" value='<c:out value="${pageMaker.searchInfo.pageNum}"/>'/>
-							<input type='hidden' name="amount" value='<c:out value="${pageMaker.searchInfo.amount}"/>'/>
-							<button type='btn btn-default'>검색</button>
+							<div class="input-group custom-search-form">
+								<input type='text' name='keyword' class="form-control" placeholder="검색"
+									   value='<c:out value="${pageMaker.searchInfo.keyword}"/>' size="50">
+
+								<span class="input-group-btn">
+									<button class='btn btn-default' type="button">
+										<i class="fa fa-search"></i>
+									</button>
+								</span>
+							</div>
 						</form>
 					</div>
 				</div>
+
+<%--				<li class="sidebar-search">--%>
+<%--					<div class="input-group custom-search-form">--%>
+<%--						<input type="text" class="form-control" placeholder="Search...">--%>
+<%--						<span class="input-group-btn">--%>
+<%--                                <button class="btn btn-default" type="button">--%>
+<%--                                    <i class="fa fa-search"></i>--%>
+<%--                                </button>--%>
+<%--                            </span>--%>
+<%--					</div>--%>
+<%--					<!-- /input-group -->--%>
+<%--				</li>--%>
+
 
 				<!-- Pagination -->
 				<div class='pull-right'>
