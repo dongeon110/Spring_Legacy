@@ -14,7 +14,12 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">게시물
-				<button id="regBtn" type="button" class="btn btn-xs pull-right">새 글 작성</button>
+				<sec:authorize access="isAuthenticated()">
+					<button id="regBtn" type="button" class="btn btn-xs pull-right">새 글 작성</button>
+				</sec:authorize>
+				<sec:authorize access="isAnonymous()">
+					<button id="loginBtn" type="button" class="btn btn-xs pull-right">로그인</button>
+				</sec:authorize>
 			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -201,6 +206,10 @@
 
 		$("#regBtn").on("click", function(){
 			self.location = "/board/add";
+		});
+
+		$("#loginBtn").on("click", function(){
+			self.location = "/customLogin";
 		});
 
 		<!-- Paging -->
