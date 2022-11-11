@@ -91,4 +91,12 @@
         SELECT count(*) FROM member
         <include refid="searchinfo"></include>
     </select>
+
+    <update id="memberAuthAdd" parameterType="map">
+        INSERT INTO member_auth(userid, auth) VALUES (#{userid}, #{auth})
+    </update>
+
+    <delete id="memberAuthDelete" parameterType="map">
+        DELETE FROM member_auth WHERE userid=#{userid} AND auth=#{auth}
+    </delete>
 </mapper>

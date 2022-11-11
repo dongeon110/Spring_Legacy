@@ -1,6 +1,7 @@
 package board.dongeon.mapper;
 
 import board.dongeon.domain.SearchInfo;
+import board.dongeon.domain.dto.UpdateAuthDTO;
 import board.dongeon.domain.vo.MemberVO;
 
 import java.util.List;
@@ -19,4 +20,8 @@ public interface MemberDao {
     public int isDuplicated(String userid); // 회원 중복 확인
 
     public int getTotal(SearchInfo searchInfo); // 총 멤버 수
+    
+    public int memberAuthAdd(UpdateAuthDTO updateAuthDTO); // 회원 권한 부여
+
+    public int memberAuthDelete(UpdateAuthDTO updateAuthDTO); // 회원 권한 삭제
 }

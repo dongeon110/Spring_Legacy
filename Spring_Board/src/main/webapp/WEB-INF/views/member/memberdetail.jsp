@@ -24,8 +24,7 @@
 
         <div class="panel-body">
           <form id="operFormAuth" method="post">
-
-            <input type='hidden' id='pno' name='pno' value='<c:out value="${memberVO.userid}"/>'>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type='hidden' name='originauth' value='<c:out value="${memberAuth}"/>'>
             <input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
             <input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
@@ -47,24 +46,16 @@
               <input type="checkbox" name="auth" value="ROLE_ADMIN" > 관리자 권한
               <input type="checkbox" name="auth" value="ROLE_USER" > 일반사용자 권한
             </div>
-
+          </form>
             <sec:authorize access="isAuthenticated()">
               <sec:authentication property="principal" var="pinfo"/>
               <c:if test="${isadmin}">
-                <button data-oper="modify"
+                <button data-oper="modify" type="button"
                         class="btn btn-default">
                   수정
                 </button>
               </c:if>
 
-            </sec:authorize>
-            <sec:authorize access="${isadmin}">
-              <c:if test="${!memberVO.enabled}">
-                <button data-oper="restorepost"
-                        class="btn btn-default">
-                  복구하기
-                </button>
-              </c:if>
             </sec:authorize>
             <button data-oper="memberlist"
                     class="btn btn-info">
@@ -73,12 +64,17 @@
 
 
 
+          <form id="operForm" method="get">
+            <input type='hidden' id='userid' name='userid' value='<c:out value="${memberVO.userid}"/>'>
+            <input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+            <input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+            <input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+            <input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
           </form>
 
-          <form id="operFormPost" action="/board/restore" method="post">
+          <form id="operFormPost" method="post">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type='hidden' id='userid' name='userid' value='<c:out value="${memberVO.userid}"/>'>
-
             <input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
             <input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
             <input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
@@ -115,24 +111,20 @@
   $(document).ready(function() {
 
     var operForm = $("#operForm");
+    var operFormAuth = $("#operFormAuth");
     var operFormPost = $("#operFormPost");
     $("button[data-oper='modify']").on("click", function(e) {
-      operForm.attr("action", "/board/update").submit();
-    });
-
-    $("button[data-oper='addrepost']").on("click", function(e) {
-
-      operForm.attr("action", "/board/addrepost").submit();
+      if($("input:checkbox[name='auth']").is(":checked")==false) {
+        alert("적어도 하나의 권한은 있어야 합니다.");
+      } else {
+        operFormAuth.attr("action", "/member/memberupdate").submit();
+      }
     });
 
     $("button[data-oper='memberlist']").on("click", function(e) {
       operForm.find("#userid").remove();
       operForm.attr("action", "/member/memberlist")
       operForm.submit();
-    });
-
-    $("button[data-oper='restorepost']").on("click", function(e) {
-      operFormPost.attr("action", "/board/restore").submit();
     });
 
   });

@@ -1,6 +1,7 @@
 package board.dongeon.service;
 
 import board.dongeon.domain.SearchInfo;
+import board.dongeon.domain.dto.UpdateAuthDTO;
 import board.dongeon.domain.vo.MemberVO;
 import board.dongeon.mapper.MemberDao;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,15 @@ public class MemberServiceImpl implements MemberService {
         int total = memberDao.getTotal(searchInfo);
         log.info("getTotal member: " + total);
         return total;
+    }
+
+    public void addAuth(UpdateAuthDTO updateAuthDTO) {
+        log.info("add new Auth" + updateAuthDTO.getUserid() + ":" + updateAuthDTO.getAuth());
+        memberDao.memberAuthAdd(updateAuthDTO);
+    }
+
+    public void deleteAuth(UpdateAuthDTO updateAuthDTO) {
+        log.info("delete Auth" + updateAuthDTO.getUserid() + ":" + updateAuthDTO.getAuth());
+        memberDao.memberAuthDelete(updateAuthDTO);
     }
 }
