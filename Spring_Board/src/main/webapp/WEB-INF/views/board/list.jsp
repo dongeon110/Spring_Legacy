@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%@include file="../includes/header.jsp" %>
+<c:set var="now" value="<%= new java.util.Date()%>" />
+<fmt:parseNumber value="${now.time / (1000*60*60*24)}" integerOnly="true" var="rightnow"></fmt:parseNumber>
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">게시판</h1>
@@ -45,7 +47,7 @@
 											&nbsp&nbsp&nbsp
 										</c:forEach>
 										<c:if test="${postVO.redepth != 0}" var="re">
-											<span class="badge badge-primary">[Re]</span>
+											<span class="label label-default">[Re]</span>
 										</c:if>
 										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
 											${postVO.postSubject}
@@ -53,6 +55,17 @@
 										<c:if test="${postVO.cntReply > 0}">
 											<span style="color:red;">&nbsp[${postVO.cntReply}]</span>
 										</c:if>
+
+										<fmt:parseNumber value="${postVO.postCreatedDate.time / (1000*60*60*24)}" integerOnly="true" var="strDate"></fmt:parseNumber>
+										<fmt:parseNumber value="${postVO.postUpdateDate.time / (1000*60*60*24)}" integerOnly="true" var="upDate"></fmt:parseNumber>
+
+										<c:if test="${rightnow == strDate}">
+											<span class="label label-danger label-as-badge">NEW</span>
+										</c:if>
+										<c:if test="${rightnow != strDate && rightnow == upDate}">
+											<span class="label label-success label-as-badge">Update</span>
+										</c:if>
+
 									</td>
 									<td>${postVO.postViews}</td>
 									<td>
@@ -70,7 +83,7 @@
 											&nbsp&nbsp&nbsp
 										</c:forEach>
 										<c:if test="${postVO.redepth != 0}" var="re">
-											<span class="badge badge-primary">[Re]</span>
+											<span class="label label-default">[Re]</span>
 										</c:if>
 										삭제된 게시물 입니다.
 									</td>

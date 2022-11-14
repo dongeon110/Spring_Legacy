@@ -40,7 +40,7 @@
 											&nbsp&nbsp&nbsp
 										</c:forEach>
 										<c:if test="${postVO.redepth != 0}" var="re">
-											<span class="badge badge-primary">[Re]</span>
+											<span class="label label-default">[Re]</span>
 										</c:if>
 										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
 											${postVO.postSubject}
@@ -65,7 +65,7 @@
 											&nbsp&nbsp&nbsp
 										</c:forEach>
 										<c:if test="${postVO.redepth != 0}" var="re">
-											<span class="badge badge-primary">[Re]</span>
+											<span class="label label-default">[Re]</span>
 										</c:if>
 										[삭제된 게시물]
 										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
