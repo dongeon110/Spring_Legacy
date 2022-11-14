@@ -24,6 +24,10 @@
 
 				<form role="form" action="/board/addrepost" method="post">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<input type='hidden' name='pageNum' value='<c:out value="${searchInfo.pageNum}"/>'>
+					<input type='hidden' name='amount' value='<c:out value="${searchInfo.amount}"/>'>
+					<input type='hidden' name='keyword' value='<c:out value="${searchInfo.keyword}"/>'>
+					<input type='hidden' name='type' value='<c:out value="${searchInfo.type}"/>'>
 
 					<div class="form-group">
 						<input class="form-control" type="hidden"

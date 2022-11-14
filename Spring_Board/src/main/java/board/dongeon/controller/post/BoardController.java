@@ -145,12 +145,14 @@ public class BoardController {
     public void addrepost(@RequestParam("pno") int pno, @ModelAttribute("searchInfo") SearchInfo searchInfo, Model model) {
         log.info("/addrepost");
         model.addAttribute("originpostVO", service.get(pno));
+        model.addAttribute("searchInfo", searchInfo);
         log.info("originpostVO" + service.get(pno));
     }
 
     @PostMapping("/addrepost")
     @PreAuthorize("isAuthenticated()")
-    public String addrepost(PostVO postVO, int originpost, RedirectAttributes rttr, Model model) {
+    public String addrepost(PostVO postVO, int originpost, RedirectAttributes rttr,
+                            SearchInfo searchInfo, Model model) {
         log.info("==========================");
         log.info("add repost: " + postVO);
 
@@ -162,7 +164,7 @@ public class BoardController {
         log.info("==========================");
         service.addRepost(postVO);
         rttr.addFlashAttribute("result", postVO.getPostNo());
-        return "redirect:/board/list";
+        return "redirect:/board/list" + searchInfo.getListLink();
     }
 
 
