@@ -14,9 +14,9 @@
   <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
   <!-- Bootstrap Core CSS -->
-<%--  <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">--%>
+  <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- 합쳐지고 최소화된 최신 CSS -->
+<%--    <!-- 합쳐지고 최소화된 최신 CSS -->--%>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
     <!-- 부가적인 테마 -->
