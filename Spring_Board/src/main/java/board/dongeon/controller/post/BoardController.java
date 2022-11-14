@@ -12,11 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -163,10 +158,6 @@ public class BoardController {
 //        int originpostNo = Integer.parseInt(originpostNoStr);
         postVO.setReparent(originpost);
 
-        // 파일 업로드
-//        if (postVO.getAttachList() != null) {
-//            postVO.getAttachList().forEach(attach -> log.info(attach));
-//        }
 
         log.info("==========================");
         service.addRepost(postVO);
