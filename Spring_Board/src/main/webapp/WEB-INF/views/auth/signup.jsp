@@ -63,7 +63,7 @@
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}" />
           </form>
-
+          <a href="/customLogin" class="btn btn-lg btn-warning btn-block">돌아가기</a>
         </div>
       </div>
     </div>
@@ -97,10 +97,10 @@
 
 </script>
 
-<c:if test="${param.logout != null}">
+<c:if test="${param.duplicated != null}">
   <script>
     $(document).ready(function(){
-      alert("로그아웃하였습니다.");
+      alert("ID 중복.");
     });
   </script>
 </c:if>

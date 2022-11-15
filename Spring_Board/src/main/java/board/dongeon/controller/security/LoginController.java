@@ -74,13 +74,13 @@ public class LoginController {
         log.info("passwordEncoder memberVO: " + memberVO);
         service.memberCreate(memberVO);
         rttr.addFlashAttribute("result", "success");
-        return "redirect:/board/list";
+        return "redirect:/customLogin";
     }
 
     @GetMapping("/isduplicated")
     @PreAuthorize("isAnonymous()")
-    public void isduplicated() {
-
+    public String isduplicated() {
+        return "redirect:/auth/signup?duplicated";
     }
 
 
