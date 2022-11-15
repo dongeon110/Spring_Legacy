@@ -67,7 +67,7 @@
 										<c:if test="${postVO.redepth != 0}" var="re">
 											<span class="label label-default">[Re]</span>
 										</c:if>
-										[삭제된 게시물]
+										<span class="label label-danger label-as-badge">[삭제된 게시물]</span>
 										<a class="move" href='<c:out value="${postVO.postNo}"/>'>
 												${postVO.postSubject}
 										</a>

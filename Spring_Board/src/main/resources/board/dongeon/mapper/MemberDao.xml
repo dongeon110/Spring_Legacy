@@ -77,7 +77,7 @@
                     SELECT userid, username, regdate, enabled
                     FROM member
                     <include refid="searchinfo"></include>
-                    ORDER BY userid ASC
+                    ORDER BY regdate DESC
                     ) AS searchtable
                 ) AS rntable
             <![CDATA[
